@@ -584,8 +584,9 @@ Z. et al. 提出以 **点云（Point Cloud）** 替代 RGB 图像输入，从而
 
 ##### 🚀 ScaleDP （2024）：Transformer 扩展与大模型化  
 W. et al. 提出 **ScaleDP**，将模型参数规模扩展至 10⁹ 级，实现多臂协同控制与复杂任务规划。
+
 **论文与代码：**  
-- 📄 [Scaling Diffusion Policy in Transformer to 1 Billion Parameters for Robotic Manipulation](https://arxiv.org/abs/2409.14411)  
+- 📄 [Scaling Diffusion Policy in Transformer to 1 Billion Parameters for Robotic Manipulation (arXiv 2024)](https://arxiv.org/abs/2409.14411)  
 - 💻 [https://github.com/YanjieZe/3D-Diffusion-Policy](https://github.com/StabRise/ScaleDP)
 
 ###### 关键创新  
