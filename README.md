@@ -584,6 +584,9 @@ Z. et al. 提出以 **点云（Point Cloud）** 替代 RGB 图像输入，从而
 
 ##### 🚀 ScaleDP （2024）：Transformer 扩展与大模型化  
 W. et al. 提出 **ScaleDP**，将模型参数规模扩展至 10⁹ 级，实现多臂协同控制与复杂任务规划。
+**论文与代码：**  
+- 📄 [Scaling Diffusion Policy in Transformer to 1 Billion Parameters for Robotic Manipulation](https://arxiv.org/abs/2409.14411)  
+- 💻 [https://github.com/YanjieZe/3D-Diffusion-Policy](https://github.com/StabRise/ScaleDP)
 
 ###### 关键创新  
 - **Non-Causal Attention**：允许跨时间步信息交互，实现“前瞻性”动作建模  
@@ -603,7 +606,7 @@ W. et al. 提出 **ScaleDP**，将模型参数规模扩展至 10⁹ 级，实现
 
 | 方法                         | 技术机制                                  | 加速比 | 特点                        |
 |------------------------------|-------------------------------------------|--------|-----------------------------|
-| Consistency Policy (Prasad 2024) | 利用一致性损失，将多步扩散蒸馏为单步采样     | 🔟×   | 实时控制可行               |
+| Consistency Policy (Prasad 2024) | 利用一致性损失，将多步扩散蒸馏为单步采样     | 10×   | 实时控制可行               |
 | Simple DP3                   | 精简 UNet 架构                             | 2×     | 精度无损结构压缩           |
 | DPPO                         | 将 PPO 强化学习融入扩散后端                 | –      | 在稀疏奖励任务中成功率从 57% 提升至 97% |
 
