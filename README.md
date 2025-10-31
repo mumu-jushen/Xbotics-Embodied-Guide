@@ -498,7 +498,7 @@
   
   **适用场景**：**嵌入式机器人、无人机伴飞、移动机械臂**等极致算力受限平台。
 
- - **WALL-OSS: Igniting VLMs toward the Embodied Space**  
+- **WALL-OSS: Igniting VLMs toward the Embodied Space**  
   [Paper](https://arxiv.org/abs/2509.11766) | [Code](https://github.com/X-Square-Robot/wall-x)
   
   **创新点**：
