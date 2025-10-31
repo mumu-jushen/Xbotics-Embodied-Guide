@@ -61,7 +61,123 @@
 **你将获得**：统一术语、问题划分与评测框架；从“感知—决策—控制—评测”建立大图景。
 **小标题**
 
-* 1.1 范式与框架：IL / RL / VLA / Diffusion Policy / 世界模型
+* 1.1 术语速览
+
+# 术语速览 · 具身智能系统关键词手册
+
+## 目录（Table of Contents）
+- [1.1.1 学习范式与策略框架（IL / RL / VLA / Diffusion Policy / World Model）](#1-学习范式与策略框架il--rl--vla--diffusion-policy--world-model)
+- [1.1.2 控制与规划常用概念](#2-控制与规划常用概念)
+- [1.1.3 感知与表征（Robotics Models）](#3-感知与表征robotics-models)
+- [1.1.4 系统工程（Robot System Engineering）](#4-系统工程robot-system-engineering)
+- [1.1.5 人机交互（HRI）](#5-人机交互hri)
+- [1.1.6 安全与标准](#6-安全与标准)
+- [1.1.7 常见文件与工具栈](#7-常见文件与工具栈)
+- [1.1.8 行业顶会 / 顶刊](#8-行业顶会--顶刊)
+- [1.1.9 机器人基础（Robotics Basics）](#9-机器人基础robotics-basics)
+
+---
+
+## 1 学习范式与策略框架（IL / RL / VLA / Diffusion Policy / World Model）
+- **行为克隆（Behavior Cloning, BC）**：把控制当成监督学习：输入观测/指令，输出动作。优点是数据友好、上手快；缺点是分布外脆弱（covariate shift），需靠干预/DAgger/重置策略兜底。  
+- **逆强化学习（Inverse Reinforcement Learning, IRL）/偏好学习**：先学“奖励/偏好”，再用 RL 求策略；泛化好，但链路长、训练贵。  
+- **GAIL / 对抗模仿**：通过判别器让“机器人轨迹像专家”，绕开显式奖励建模。对抗稳定性与探索机理是工程挑战。  
+- **离线 RL / 在线 RL / Offline-to-Online（O2O）**：离线：全靠静态数据、安全可控；在线：探索充分但要解决安全与成本；O2O：先离线“站起来”，再在线“走起来”，符合工程常识。  
+- **层级策略（Hierarchical Policy）**：高层做子目标/技能编排（options / behavior trees / task graphs），中层学习原子技能，低层用跟踪控制/安全壳执行。  
+- **VLA（视觉–语言–动作, Vision–Language–Action）**：从视觉–语言模型（VLM）微调到端到端控制：看图、听指令、输出动作，同步提升开放词汇与长时序任务能力。  
+- **扩散策略（Diffusion Policy）**：用生成模型在轨迹/动作分布上采样，天然平滑、抗噪，易接视觉/语言条件；部署时注意采样延迟与实时间隔对齐。  
+- **世界模型（World Model, WM）**：学习“可微的环境动态”，在潜空间里做规划/MPC/RL，把昂贵的真机交互换成“脑内演练”；关键在表征学习、模型偏差控制、闭环落地。  
+- **残差学习与模型融合**：用 MPC/几何控制做“主干”，RL/IL 学残差/补偿（摩擦、柔顺、延迟、未建模动力学），在工业里很常见。  
+- **安全壳（Safety Shield）**：策略外层的速度/力矩限幅、碰撞守卫、紧急制动与可达性过滤，用于上线阶段风险控制与可解释合规。
+
+---
+
+## 2 控制与规划常用概念
+- **PID 控制**：比例-积分-微分反馈控制，调参直观但对时延/强耦合系统需小心。  
+- **计算力矩 / 反馈线性化（Computed-Torque Control）**：用模型抵消非线性，等效成线性目标再配 PD/PI。  
+- **阻抗/导纳控制（Impedance / Admittance Control）**：在末端力–位移间设“机械阻抗”，适合接触/打磨/装配任务。  
+- **MPC（模型预测控制）**：滚动优化、显式处理约束；实时性依赖求解器与模型精度。  
+- **规划方法**：样条插补（轻量）、PRM/RRT（高维可行性）、TrajOpt/CHOMP/STOMP（平滑高质）。  
+- **任务–技能–执行分层**：语言/图搜索/LLM 负责任务分解；技能网络（抓、推、开合…）产出子目标；低层控制稳定落地。
+
+---
+
+## 3 感知与表征（Robotics Models）
+- **视觉编码器**：ResNet、ViT、DINO 等提取语义与几何；点云侧 PointNet、PointTransformer 做位姿/重建/抓取。  
+- **VLM/LLM 融合**：CLIP、SigLIP 语义对齐；LLaVA、PaLM-E、Prism 等多模态骨干用于目标描述、子目标定位、失败解释。  
+- **表示学习**：SE(3) 等变、神经隐式（SDF/NeRF/3DGS）、可供性图（Affordance Map）、接触图谱。  
+- **状态估计与多传感融合**：RGB-D / IMU / 力矩 / 视觉跟踪，重点是时间同步与标定（手–眼、外参、时延）。
+
+---
+
+## 4 系统工程（Robot System Engineering）
+- **手–眼标定（AX=XB / A=XBY）**：求相机与机械臂坐标系刚体变换。  
+- **URDF / ROS**：机器人结构、惯量、关节、碰撞的统一描述格式。  
+- **DH 参数与现代几何表示**：关节链参数化、雅可比、奇异性分析。  
+- **记录与回放（Log & Replay）**：全链路时间戳、同步、丢包/延迟管理；用于离线评测、回归测试、复现实验。  
+- **仿真到实机（Sim2Real）**：域随机化、参数扰动、传感噪声／延迟注入、重置策略与安全门限一致化。  
+- **模型评估（Model Selection）**：成功率、完成时长、动作频率、回报；多任务场景关注最终阶段一致性，单任务场景关注最佳 checkpoint + 滑动平均。
+
+---
+
+## 5 人机交互（HRI）
+- **共享控制（Shared Autonomy）**：人提供意图/指令，机器人做低层补偿与安全保障。  
+- **可解释性（Explainability / Justification）**：策略过程可被人理解、可追溯。  
+- **信任与接受度（Trust & Acceptance）**：人对系统可靠性／可控性的主观信任度，影响系统投放与合规。  
+- **社交导航（Proxemics）**：在人群环境中机器人保持合适距离、礼貌行为与交互方式。  
+- **Wizard-of-Oz 实验**：早期 HRI 数据采集中常用“人类暗中接管机器人行为”来收集真实交互数据。  
+- **社区与会议**：ACM/IEEE HRI 是人机交互领域旗舰年会；ACM THRI 是相关期刊。
+
+---
+
+## 6 安全与标准
+- **ISO 10218-1 / -2**：工业机器人及其系统安全要求（机械、控制、集成）。  
+- **ISO/TS 15066**：协作机器人（cobot）安全指南（人机共域力限值、协作模式、安全模式等）。  
+  👉 这些标准是落地部署／验收时常被查验的条款，建议据此设计“速度／力矩限幅、停止等级、围栏／扫描仪联锁”等安全壳。
+
+---
+
+## 7 常见文件与工具栈
+- **URDF / SRDF / xACRO**：机构学与语义描述格式。  
+- **USD / GLB**：高保真几何交换格式。  
+- **ROS / ROS 2**：通信中间件；**tf/tf2** 用于坐标变换。  
+- **MoveIt**：常用运动规划＆碰撞检测框架。  
+- **Isaac Lab / ManiSkill / RoboSuite / RLBench**：主流仿真平台／基准套件。  
+- **PyTorch / JAX**：模型训练栈。**ONNX / TensorRT**：部署加速栈。  
+- **Opt / OSQP / qpOASES**：MPC/QP 求解器工具。  
+- **Bag / MCAP**：日志与回放格式。  
+
+---
+
+## 8 行业顶会 / 顶刊
+### 🧭 会议（Conferences）
+- **ICRA** – IEEE Intl. Conf. on Robotics and Automation  
+- **IROS** – IEEE/RSJ Intl. Conf. on Intelligent Robots and Systems  
+- **RSS** – Robotics: Science and Systems  
+- **CoRL** – Conference on Robot Learning  
+- **Humanoids / CASE / ISRR / ISER** 等专题会议
+
+### 📘 期刊（Journals）
+- **IEEE Transactions on Robotics (T-RO)**、**IEEE Robotics and Automation Letters (RA-L)**  
+- **The International Journal of Robotics Research (IJRR)**、**Autonomous Robots (AURO)**  
+- **Science Robotics**  
+- **Journal of Field Robotics (JFR)**  
+- **ACM THRI**（人机交互领域旗舰期刊）
+
+---
+
+## 9 机器人基础（Robotics Basics）
+- **自由度（DoF）/工作空间**：构型可动维数与末端可达区域。  
+- **正／逆运动学（FK/IK）**：通过关节角求末端位姿；或反求关节角。雅可比矩阵用于速度／力映射与奇异性分析。  
+- **动力学**：包含惯量、科氏力、离心力、重力项；控制器设计必须考虑执行器力矩、关节摩擦、负载变化。  
+- **外参／内参／时间同步**：摄像头、IMU、力传感器等多模态传感器融合基础。  
+- **手–眼／基–世界标定（AX = XB / A = XBY 问题）**：求解机器人末端与相机之间或机器人基座与世界坐标系的变换。  
+- **可供性（Affordance）**：物体“可被如何用”的语义线索，常用于抓取/操作点预测。  
+- **可达性／可操作性（Reachability / Manipulability）**：指给定关节限制／障碍环境下，末端能否达到目标位姿或姿态灵活度。  
+- **接触建模／摩擦锥模型**：抓取与装配任务中接触力、接触面、摩擦参数的基础物理模型。  
+- **软硬件在环（HIL / SIL）**：在上线前用模拟（软件／硬件）环境验证系统闭环性能与安全。  
+
+
 * 1.2 数据与评测：采集、清洗、标注、Benchmark 协议
 * 1.3 系统工程：安全、时延、同步、记录与回放
 * 1.4 典型失败模式：多步长任务、延迟对齐、域偏移
