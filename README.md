@@ -197,21 +197,34 @@
   **创新点**：
     1. 异构数据融合：轨迹 + 视频 + 合成数据联合训练，长时序鲁棒性 ↑22%。
     2. System2 解耦：感知与执行分离，提升复杂环境适应性。
+       
   **适用场景**：**工厂无人巡检、灾后搜救、动态环境适应**等需跨模态泛化的复杂任务。
 
 - **Long-VLA: Unleashing Long-Horizon Capabilities**  
-  [Paper](https://arxiv.org/abs/2508.19958) | Code（未开源）    
-  **创新点**：技能链+子任务依赖图建模，分层提示驱动多步规划，成功率>2倍SOTA。  
+  [Paper](https://arxiv.org/abs/2508.19958) | Code（未开源）
+    
+  **创新点**：
+    1. 技能链 + 依赖图：子任务结构化建模，分层提示驱动多步规划。
+    2. 长时序突破：成功率 >2× SOTA，逻辑依赖任务表现碾压。
+   
   **适用场景**：**多步烹饪、家具组装、物流分拣链**等长时序、强逻辑依赖的任务流。
 
 - **BitVLA: 1-Bit Quantized VLA for Efficiency**  
-  [Paper](https://arxiv.org/abs/2506.07530) | [Code](https://github.com/ustcwhy/BitVLA)  
-  **创新点**：三元1-bit量化+蒸馏，内存↓29.8%，LIBERO性能持平OpenVLA。  
+  [Paper](https://arxiv.org/abs/2506.07530) | [Code](https://github.com/ustcwhy/BitVLA)
+  
+  **创新点**：三元1-bit量化+蒸馏，内存↓29.8%，LIBERO性能持平OpenVLA。
+    1. 三元 1-bit 量化 + 蒸馏：内存 ↓29.8%，LIBERO 性能持平 OpenVLA。
+    2. 极致部署友好：推理开销断崖式下降。
+  
   **适用场景**：**嵌入式机器人、无人机伴飞、移动机械臂**等极致算力受限平台。
 
 - **VLA-Touch: Dual-Level Tactile Feedback Enhancement**  
-  [Paper](https://arxiv.org/abs/2507.17294) | [Code](https://github.com/jxbi1010/VLA-Touch)  
-  **创新点**：宏观+微观双层触觉融合，强化未知物体grounding，接触任务精度↑25%。  
+  [Paper](https://arxiv.org/abs/2507.17294) | [Code](https://github.com/jxbi1010/VLA-Touch)
+  
+  **创新点**：宏观+微观双层触觉融合，强化未知物体grounding，接触任务精度↑25%。
+    1. 宏观 + 微观双层触觉：高分辨率 grounding 未知物体。
+    2. 接触精度 ↑25%：柔性任务表现显著优于单模态 VLA。
+
   **适用场景**：**软体抓取、布料折叠、医疗辅助触诊**等需高触觉分辨率的柔性操作。
 
 - **X-VLA: Soft-Prompted Transformer as Scalable Cross-Embodiment Vision-Language-Action Model**  
