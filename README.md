@@ -492,7 +492,7 @@
 - **BitVLA: 1-Bit Quantized VLA for Efficiency**  
   [Paper](https://arxiv.org/abs/2506.07530) | [Code](https://github.com/ustcwhy/BitVLA)
   
-  **创新点**：三元1-bit量化+蒸馏，内存↓29.8%，LIBERO性能持平OpenVLA。
+  **创新点**：
     1. 三元 1-bit 量化 + 蒸馏：内存 ↓29.8%，LIBERO 性能持平 OpenVLA。
     2. 极致部署友好：推理开销断崖式下降。
   
