@@ -519,7 +519,17 @@
   **结构图**：
 <img width="350" height="600" alt="image" src="https://github.com/user-attachments/assets/6fcedbc7-2da0-42b0-833e-0b4f626c8dff" />
 
- **适用场景**：X-VLA 适用于**任何“硬件不同、任务复杂、数据有限”的机器人场景**，实现“一模型走天下”。
+  **适用场景**：X-VLA 适用于**任何“硬件不同、任务复杂、数据有限”的机器人场景**，实现“一模型走天下”。
+
+ - **WALL-OSS: Igniting VLMs toward the Embodied Space**  
+  [Paper](https://arxiv.org/abs/2509.11766) | [Code](https://github.com/X-Square-Robot/wall-x)
+  
+  **创新点**：
+    1. 紧耦合 MoE 架构：基于 QwenVL 2.5 构建共享注意力 + 静态路由的 VL FFN 与 Action FFN 双专家系统，实现语义与动作的强绑定，克服 π0.5 松耦合导致的指令跟随不足。
+    2. 两阶段训练（启发→集成）：先冻结 VLM 注入具身 VQA + 离散 FAST 动作先验，再冻结 VLM 仅训 Action FFN 流头初始化连续动作，最后联合优化，防止灾难性遗忘并桥接模态鸿沟。
+    3. Uni-CoT 端到端链式映射：统一从指令→CoT→子任务→连续动作的可微前向路径，支持推理-执行交错，消除流水线误差，提升长时序任务成功率。
+  
+  **适用场景**：**厨房整理**、桌面清洁、物品搬运、垃圾分类。。
   
 * 5.2 Diffusion Policy 新结构与效率
   
