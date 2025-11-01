@@ -431,6 +431,7 @@
 **贡献者**：@ptman12
 
 ### 5.1 VLA 最新进展与评测
+---
 
 以下精选2025年VLA（Vision-Language-Action）领域10篇高影响力前沿论文，每篇标注 **Paper**、**Code**（若开源）、**创新点** 与 **适用场景**，便于快速定位技术落地路径。整体趋势：力触觉融合 + 长时序规划 + 高效部署并重，在LIBERO、CALVIN-L等基准上平均提升18-35%。
 
@@ -530,9 +531,10 @@
 <img width="350" height="600" alt="image" src="https://github.com/user-attachments/assets/6fcedbc7-2da0-42b0-833e-0b4f626c8dff" />
 
   **适用场景**：X-VLA 适用于**任何“硬件不同、任务复杂、数据有限”的机器人场景**，实现“一模型走天下”。
-  
+---
 
 ### 5.2 Diffusion Policy：机器人视觉运动控制的扩散生成范式（2023–2025）
+---
 
 > **Diffusion Policy（扩散策略）** 是一种将 **扩散生成模型（Diffusion Models）** 应用于 **机器人视觉运动策略学习（Visuomotor Policy Learning）** 的新型框架。  
 > 它将动作序列生成视作 **条件去噪扩散过程（Conditional Denoising Diffusion Process）**，从生成概率角度建模动作的多模态与时间依赖特征。  
@@ -648,7 +650,7 @@ Diffusion Policy 的演进标志着机器人策略学习从确定性控制向 **
 - 📄 关键参考论文：  
   - [Diffusion Policy (RSS 2023)](https://arxiv.org/abs/2303.04137)  
   - [3D Diffusion Policy (ICRA 2024)](https://arxiv.org/abs/2403.03954)
-
+---
 
 
 
