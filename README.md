@@ -1807,6 +1807,7 @@ best_object_idx = torch.argmax(scores)
 **贡献者**：@ptman12
 
 
+
 ### 4.1 Imitation Learning（模仿学习）经典算法综述
 
 
@@ -1931,7 +1932,9 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 模仿学习作为连接专家演示与决策策略的重要范式，其经典方法 BC/DAgger/GAIL 在理论和工程上都起到了标杆作用。理解它们之间的差别、各自的适用场景和限制，有助于在实际系统中进行合理选择与设计。尤其是“数据分布偏移”与“误差累积”这两个核心风险，是选择和改进算法时必须正视的问题。
 
 
+
 ### 4.2 RL 经典：值/策略/Actor-Critic，收敛与稳定性
+
 
 #### 1. 值函数方法（Value-based Methods）
 
