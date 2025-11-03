@@ -1809,7 +1809,6 @@ best_object_idx = torch.argmax(scores)
 
 ### Imitation Learning（模仿学习）经典算法综述
 
-> 贡献者：@ptman12
 
 本节聚焦于模仿学习（Imitation Learning, IL）中的三大经典方法：​**行为克隆（Behavioral Cloning, BC）**​、​**数据集聚合（Dataset Aggregation, DAgger）**​、以及​**生成式对抗模仿学习（Generative Adversarial Imitation Learning, GAIL）**​。重点讨论它们的原理、经典论文、数据分布偏移（covariate shift）与误差累积问题，以及它们之间的关系与演进。
 
@@ -1828,30 +1827,29 @@ best_object_idx = torch.argmax(scores)
 
 例如交叉熵损失、回归均方误差等。许多早期工作（如 ALVINN）即采用此方式。 ([arxiv.org](https://arxiv.org/pdf/2106.12177?utm_source=chatgpt.com "Imitation Learning: Progress, Taxonomies and Challenges"))
 
-### 2.2 优点
+##### 2.2 优点
 
 * 简单易实现：直接将监督学习技术迁移至策略学习。
 * 在专家演示覆盖面较好、环境状态分布较为稳定的场景下，表现常常不错。
 * 无需额外设计奖励函数、无需智能体与环境反复交互。
 
-### 2.3 缺点 — 数据分布偏移与误差累积
+##### 2.3 缺点 — 数据分布偏移与误差累积
 
 正如前文所述，BC 的关键短板在于：训练时只见到了专家策略下的状态分布，而部署时智能体策略可能偏离专家，进入“未知”状态区域，导致性能剧降。这个过程往往伴随着误差累积。文献中从“值差异”角度分析，指出 BC 的值差异（在无穷期折扣模型下）是<img width="112" height="33" alt="image" src="https://github.com/user-attachments/assets/2642ee1b-0c53-4b9a-bcb8-5dba86ce5c40" />
  级别。 ([arxiv.org](https://arxiv.org/abs/1911.07027?utm_source=chatgpt.com "On Value Discrepancy of Imitation Learning"))
 
 换句话说，如果智能体偶尔偏离专家轨迹，一旦进入偏离状态，再恢复到专家轨迹的难度就会变大，错误可能一发不可收。很多实践中，这一问题使 BC 在真实环境（尤其是高维、长时序任务）中表现并不稳定。
 
-### 2.4 经典论文／引用
+##### 2.4 经典论文／引用
 
 * Pomerleau, D. A. “ALVINN: an autonomous land vehicle in a neural network.” (1990 年代) — 较早的监督式驾驶模仿学习。
 * 相关综述：Zheng et al., “Imitation Learning: Progress, Taxonomies and Challenges” (2021) ([arxiv.org](https://arxiv.org/pdf/2106.12177?utm_source=chatgpt.com "Imitation Learning: Progress, Taxonomies and Challenges"))
 * 值差异分析：Xu et al., “On Value Discrepancy of Imitation Learning” (2019) ([arxiv.org](https://arxiv.org/abs/1911.07027?utm_source=chatgpt.com "On Value Discrepancy of Imitation Learning"))
 
----
 
-## 3. 数据集聚合（DAgger）
+#### 3. 数据集聚合（DAgger）
 
-### 3.1 算法简介
+##### 3.1 算法简介
 
 为了解决 BC 的分布偏移问题，DAgger（Dataset Aggregation）在训练过程中允许智能体以当前策略与专家策略混合控制，从而生成新的状态–动作对，并让专家对智能体经历的新状态进行标注。这样，数据集不断 **聚合（aggregate）** 新状态–动作对，包含智能体可能进入的“偏离”状态，从而缩小训练／部署时状态分布的差距。
 典型流程：
@@ -1867,28 +1865,27 @@ best_object_idx = torch.argmax(scores)
 5. 重复训练直到收敛。
    详见教材中算法说明。 ([algorithmsbook.com](https://algorithmsbook.com/files/chapter-18.pdf?utm_source=chatgpt.com "18 Imitation Learning"))
 
-### 3.2 优点
+##### 3.2 优点
 
 * 能有效缓解智能体进入“未见状态”时缺乏标注的问题。
 * 通过在线“探索”其策略可能到达的状态，并让专家加标签，从而覆盖更多状态–动作对。
 * 在理论上，为策略的训练损失在其自身状态分布下提供了边界保障。 ([arxiv.org](https://arxiv.org/pdf/2106.12177?utm_source=chatgpt.com "Imitation Learning: Progress, Taxonomies and Challenges"))
 
-### 3.3 缺点与实际考量
+##### 3.3 缺点与实际考量
 
 * 需要专家随时可查询：在执行过程中智能体生成新状态时，需要专家实时标注动作，这在许多现实场景中成本较高或不可行。
 * 虽然改进了 BC 的分布偏移问题，但仍可能存在：如果策略已严重偏离，生成状态–动作对的质量可能较低。
 * 在安全敏感任务中，智能体自主探索可能带来风险。相关扩展如 DropoutDAgger 试图引入不确定性估计以控制风险。 ([arxiv.org](https://arxiv.org/abs/1709.06166?utm_source=chatgpt.com "DropoutDAgger: A Bayesian Approach to Safe Imitation Learning"))
 
-### 3.4 经典论文／引用
+##### 3.4 经典论文／引用
 
 * Ross, Gordon & Bagnell, “A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning” (2011) — 原始 DAgger 论文。
 * 综合教材：MIT AlgorithmsBook 第 18 章 “Imitation Learning” 描述 DAgger 算法实现。 ([algorithmsbook.com](https://algorithmsbook.com/files/chapter-18.pdf?utm_source=chatgpt.com "18 Imitation Learning"))
 
----
 
-## 4. 生成式对抗模仿学习（GAIL）
+#### 4. 生成式对抗模仿学习（GAIL）
 
-### 4.1 算法简介
+##### 4.1 算法简介
 
 GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络（GAN）的思想，将模仿学习转化为一种 **匹配专家与政策的状态–动作分布** 的问题。
 
@@ -1904,7 +1901,7 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 
   策略训练通常结合强化学习（如 TRPO）驱动。 ([arxiv.org](https://arxiv.org/html/2408.06536v2?utm_source=chatgpt.com "A Comparison of Imitation Learning Algorithms for ..."))
 
-### 4.2 优点
+##### 4.2 优点
 
 * 本质上考虑了 ​**分布匹配**​（而非仅监督拟合专家动作），因此在理论上比单纯 BC 更强。比如，通过 “值差异” 框架表明，GAIL 的误差为 <img width="109" height="29" alt="image" src="https://github.com/user-attachments/assets/f7090970-bbb3-43ab-bea2-97bd033d360f" />
 ，好于 BC 的<img width="110" height="33" alt="image" src="https://github.com/user-attachments/assets/90c85de0-5493-4b58-b2a4-cc780b077f6a" />
@@ -1912,48 +1909,38 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 * 能适应更灵活的行为复制（不仅仅是专家动作的直接复制）——通过交互获得更多样本。
 * 在仿真任务中通常优于 BC。 ([ziiiliu.github.io](https://ziiiliu.github.io/files/R255_zl413_Topic_1.pdf?utm_source=chatgpt.com "Generative Adversarial Imitation Learning Benchmarking and ..."))
 
-### 4.3 缺点与挑战
+##### 4.3 缺点与挑战
 
 * 训练不稳定：GAN 式训练容易出现判别器／生成器失衡、模式崩塌等问题。
 * 仍需与环境交互（需要 rollout），对于真实物理系统可能成本高或不安全。
 * 对于真实专家状态–动作覆盖非常稀疏或多模态行为，匹配专家分布仍面临挑战（例如模态丢失）——有研究将其与 (f)-散度最小化框架关联。 ([arxiv.org](https://arxiv.org/abs/1905.12888?utm_source=chatgpt.com "Imitation Learning as $f$-Divergence Minimization"))
 
-### 4.4 经典论文／引用
+##### 4.4 经典论文／引用
 
 * Ho, Jonathan & Ermon, Stefano, “Generative Adversarial Imitation Learning”, NeurIPS 2016.
 * 相关综述：Liu, Z. “Generative Adversarial Imitation Learning Benchmarking and …” (2019) ([ziiiliu.github.io](https://ziiiliu.github.io/files/R255_zl413_Topic_1.pdf?utm_source=chatgpt.com "Generative Adversarial Imitation Learning Benchmarking and ..."))
 
----
 
-## 5. 三者关系与误差累积视角总结
+#### 5. 三者关系与误差累积视角总结
 
-### 5.1 从 BC → DAgger → GAIL 的演进
+##### 5.1 从 BC → DAgger → GAIL 的演进
 
 * ​**BC**​：最为简单、监督学习式，但受限于专家状态分布，容易偏离后累积错误。
 * ​**DAgger**​：引入在线采样＋专家标注机制，缓解状态分布偏移，但需要专家持续参与。
 * ​**GAIL**​：进一步把焦点放在智能体生成状态–动作分布与专家匹配上，通过 adversarial training 实现更强泛化能力。
 
-### 5.3 实践建议
+##### 5.3 实践建议
 
 * 若演示数据量大、覆盖面广、状态–动作映射稳定、环境变化少：BC 是一个合理起点。
 * 若部署环境复杂、策略偏离风险高、专家仍可参与：推荐使用 DAgger 或其变体。
 * 若环境复杂、专家标注代价高、希望智能体具备较强泛化或生成能力：可考虑 GAIL 及其后续扩展。
 * 在任何方法中，都应关注：演示数据的覆盖质量、智能体训练后可能到达的状态范围、以及对“偏离状态”的监控或补充机制。
 
----
 
-## 6. 总结
+#### 6. 总结
 
 模仿学习作为连接专家演示与决策策略的重要范式，其经典方法 BC/DAgger/GAIL 在理论和工程上都起到了标杆作用。理解它们之间的差别、各自的适用场景和限制，有助于在实际系统中进行合理选择与设计。尤其是“数据分布偏移”与“误差累积”这两个核心风险，是选择和改进算法时必须正视的问题。
 
----
-
-## 7. 参考文献（部分）
-
-* Z. Zheng, et al., ​*Imitation Learning: Progress, Taxonomies and Challenges*​, arXiv 2021. ([arxiv.org](https://arxiv.org/pdf/2106.12177?utm_source=chatgpt.com "Imitation Learning: Progress, Taxonomies and Challenges"))
-* T. Xu, Z. Li, Y. Yu, ​*On Value Discrepancy of Imitation Learning*​, arXiv 2019. ([arxiv.org](https://arxiv.org/abs/1911.07027?utm_source=chatgpt.com "On Value Discrepancy of Imitation Learning"))
-* “Imitation Learning as (f)-Divergence Minimization”, L. Ke et al., arXiv 2019. ([arxiv.org](https://arxiv.org/abs/1905.12888?utm_source=chatgpt.com "Imitation Learning as $f$-Divergence Minimization"))
-* “A Comparison of Imitation Learning Algorithms for …”, arXiv 2024. ([arxiv.org](https://arxiv.org/html/2408.06536v2?utm_source=chatgpt.com "A Comparison of Imitation Learning Algorithms for ..."))
 
 
 * 4.2 RL 经典：值/策略/Actor-Critic，收敛与稳定性
