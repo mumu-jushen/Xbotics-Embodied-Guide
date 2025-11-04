@@ -2366,7 +2366,6 @@ SigLIP（Sigmoid Loss for Language–Image Pre-training）于 2023 年提出，�
 
 
 
-* 4.5 扩散与生成：条件扩散、动作分布建模
 * 4.6 世界模型：潜在动力学与想象训练
 
 ---
