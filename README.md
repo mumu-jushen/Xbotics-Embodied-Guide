@@ -2276,7 +2276,7 @@ SigLIP（Sigmoid Loss for Language–Image Pre-training）于 2023 年提出，�
 * 典型优化形式（离散时间）：
   <img width="521" height="60" alt="image" src="https://github.com/user-attachments/assets/31a8179f-e53a-4df6-9fe3-18b4d5100e20" />
 
-  然后只使用 (u\_0)，前移至下一个时刻。
+  然后只使用 (u/0)，前移至下一个时刻。
 
 ##### 4.2 优势与局限
 
