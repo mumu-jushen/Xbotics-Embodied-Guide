@@ -2219,12 +2219,6 @@ SigLIP（Sigmoid Loss for Language–Image Pre-training）于 2023 年提出，�
 
 ![Image](https://dilithjay.com/assets/images/race-car-1-1024x1024.png)
 
-![Image](https://www.researchgate.net/publication/396671756/figure/fig1/AS%3A11431281682652512%401760855541106/llustration-of-the-architecture-of-the-ZSG-MPPI-method-The-optimal-control-u-and.ppm)
-
-![Image](https://www.researchgate.net/publication/362186053/figure/fig1/AS%3A11431281092889291%401667017222708/A-simplified-representation-of-the-MPPI-algorithm-during-each-optimization-iteration-For.png)
-
-![Image](https://www.researchgate.net/publication/382219766/figure/fig1/AS%3A11431281260232654%401720861556366/The-MPPI-controller-follows-a-target-trajectory-blue-while-avoiding-collisions-with.png)
-
 ![Image](https://pub.mdpi-res.com/mathematics/mathematics-13-00810/article_deploy/html/images/mathematics-13-00810-g003.png?1741081400=)
 
 * MPPI（Model Predictive Path Integral control）是一种基于采样的最优控制方法：在当前状态下，随机采样多条未来控制序列（roll‐outs），利用系统模型模拟得到状态轨迹，按代价计算权重，再通过加权平均更新控制序列。 ([arxiv.org](https://arxiv.org/html/2309.12566v2?utm_source=chatgpt.com "Recent Advances in Path Integral Control for Trajectory ..."))
