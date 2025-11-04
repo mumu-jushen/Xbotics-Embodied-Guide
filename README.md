@@ -2148,7 +2148,244 @@ SigLIP（Sigmoid Loss for Language–Image Pre-training）于 2023 年提出，�
 
 * 当训练资源（如 GPU 内存、batch 大小）受限时，建议优先考虑 SigLIP。
 * 若可使用大 batch 规模、大量数据，并且侧重最大化模型能力， CLIP 仍然具备成熟生态与优异性能。
-* 4.4 控制与规划：iLQR/MPPI/MPC 与 TrajOpt
+
+
+
+### 4.4 轨迹 优化与实时控制：iLQR、MPPI、MPC 与 TrajOpt 解析
+
+#### 1. 背景：轨迹优化 vs 实时控制
+
+##### 1.1 定义与区别
+
+* ​**轨迹优化（Trajectory Optimization）**​：给定系统动力学、初始状态、目标状态与时间 区间，通过优化求取状态轨迹 ({x(t),u(t)}) 使得某个代价函数最小。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* ​**实时控制（Real-time Control）**​：在系统运行中，基于当前状态和预测模型，快速计算控制输入 (u) 以驱动系统达到期望行为，比如跟踪、避障、稳定等。
+* 轨迹优化往往是**离线或准实时**的（可做规划、初始化），而实时控制则强调​**在线快速响应**​、实时性、高频率执行。
+* 在机器人系统中，两者经常结合使用：轨迹优化生成参考或初始解，实时控制负责闭环执行、修正扰动与模型误差。
+
+##### 1.2 为什么选择 iLQR/MPPI/MPC/TrajOpt？
+
+* 机器人、自动驾驶、飞行器等系统动力学复杂、非线性、受限多。传统 PID／LQR 方式难以同时处理非线性、约束、规划与控制。
+* 方法如 iLQR、MPPI、MPC、TrajOpt 逐渐成为主流：它们分别代表了基于二次近似、采样／路径积分方式、预测最优控制、轨迹优化器的不同范式。
+* 能帮助实现：
+  * 在动态环境中实时规划和控制 （如 MPC、MPPI）
+  * 利用模型信息提升性能 （比如 iLQR）
+  * 在配置空间或关节空间进行轨迹生成 （TrajOpt）
+
+---
+
+#### 2. iLQR：迭代线性二次调节器
+
+##### 2.1 方法概述
+
+![Image](https://studywolf.wordpress.com/wp-content/uploads/2016/02/2linklxcost.gif?w=584)
+
+![Image](https://miro.medium.com/v2/resize%3Afit%3A1400/1%2AAVollmq0lt3MkfV5aOkRiQ.jpeg)
+
+![Image](https://tiemchart.com/new_website_24/wp-content/uploads/2018/03/Backward-Pass-Calculation.jpg)
+
+
+* iLQR（Iterative Linear Quadratic Regulator）是一种轨迹优化方法：从初始猜测的轨迹出发，对系统动力学线性化、对成本函数二次近似，然后通过一次向后-向前的 Riccati 回传计算增益与改进轨迹。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* 具体流程：
+  1. 给定系统 (\\dot x = f(x,u))，初始轨迹 ((x\_0(t),u\_0(t)))。
+  2. 在该轨迹附近线性化动力学，二次化成本。
+  3. 通过 LQR 回传得到增益序列 (K(t))、feed-forward (k(t))。
+  4. 向前模拟得到新的轨迹。
+  5. 重复直到收敛。
+
+### 2.2 优势与局限
+
+**优势**
+
+* 收敛较快：相比一般梯度下降，iLQR 利用了 LQR 结构，效率较高。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* 可以处理非线性系统，只要线性化近似合理。
+* 得到轨迹与增益，可用于轨迹追踪或下游控制。
+
+**局限**
+
+* 通常不显式处理状态／输入约束：原始 iLQR 更适合无约束或轻约束情形。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* 局部最优：依赖初始轨迹猜测；可能陷入局部极小。
+* 对大规模或高度非线性系统可能表现受限。
+
+##### 2.3 与 MPC 的关系
+
+* iLQR 可嵌入 MPC 框架：在每个时刻使用短 horizon 的 iLQR 解作为实时控制。比如 “Probabilistic iLQR for Short Time Horizon MPC” 一文即探讨此类混合方式。 ([arxiv.org](https://arxiv.org/abs/2012.06349?utm_source=chatgpt.com "Probabilistic Iterative LQR for Short Time Horizon MPC"))
+* 当系统允许实时求解时，这种组合具有较好性能。
+
+---
+
+#### 3. MPPI：模型预测路径积分控制
+
+##### 3.1 方法概述
+
+![Image](https://moonlight-paper-snapshot.s3.ap-northeast-2.amazonaws.com/arxiv/transformer-based-model-predictive-path-integral-control-1.png)
+
+![Image](https://dilithjay.com/assets/images/race-car-1-1024x1024.png)
+
+![Image](https://www.researchgate.net/publication/396671756/figure/fig1/AS%3A11431281682652512%401760855541106/llustration-of-the-architecture-of-the-ZSG-MPPI-method-The-optimal-control-u-and.ppm)
+
+![Image](https://www.researchgate.net/publication/362186053/figure/fig1/AS%3A11431281092889291%401667017222708/A-simplified-representation-of-the-MPPI-algorithm-during-each-optimization-iteration-For.png)
+
+![Image](https://www.researchgate.net/publication/382219766/figure/fig1/AS%3A11431281260232654%401720861556366/The-MPPI-controller-follows-a-target-trajectory-blue-while-avoiding-collisions-with.png)
+
+![Image](https://pub.mdpi-res.com/mathematics/mathematics-13-00810/article_deploy/html/images/mathematics-13-00810-g003.png?1741081400=)
+
+* MPPI（Model Predictive Path Integral control）是一种基于采样的最优控制方法：在当前状态下，随机采样多条未来控制序列（roll‐outs），利用系统模型模拟得到状态轨迹，按代价计算权重，再通过加权平均更新控制序列。 ([arxiv.org](https://arxiv.org/html/2309.12566v2?utm_source=chatgpt.com "Recent Advances in Path Integral Control for Trajectory ..."))
+* 该方法常用于动态场景、非线性系统、带障碍或复杂代价函数场景，因为无需对代价函数求导且可并行。
+* 操作流程简要：
+  1. 当前状态 (x\_t)，前一时刻控制序列作为初始。
+  2. 随机扰动生成 (K) 条控制序列，分别模拟未来 H 步。
+  3. 每条轨迹计算代价 (S\_k)，然后权重 (w\_k = \\exp(-\\frac1\\lambda S\_k))。
+  4. 更新控制序列为 (\\sum\_k w\_k u\_k / \\sum\_k w\_k)。
+  5. 执行第一条控制，然后前移、重算。
+
+##### 3.2 优势与局限
+
+**优势**
+
+* 对动力学模型、成本函数、障碍约束要求较少（无需梯度），适合复杂环境。
+* 可并行采样，高效利用现代 GPU。
+* 在动态障碍或未知环境时表现良好。 ([arxiv.org](https://arxiv.org/html/2309.12566v2?utm_source=chatgpt.com "Recent Advances in Path Integral Control for Trajectory ..."))
+
+**局限**
+
+* 采样量大、计算量高，对实时性要求高的系统可能有挑战。
+* 没有明确的收敛保证或全局最优性。
+* 参数（采样数 K、温度 λ、扰动分布等）调节较敏感。
+
+##### 3.3 与 MPC / iLQR 的关系
+
+* MPPI 本身具有预测‐重规划的结构，属于一种 MPC 范式。文章中提到 “DDP and MPPI implemented with MPC” 的探讨。 ([NASA 技术报告服务器](https://ntrs.nasa.gov/api/citations/20210025529/downloads/SciTech2022%20-%20Path%20Planning_DDP%20and%20MPPI%20Applied%20to%20UAM%20-%20Houghton_Oshin_v4.pdf?utm_source=chatgpt.com "Path Planning: Differential Dynamic Programming and ..."))
+* 与 iLQR 不同的是，MPPI 偏向采样探索；而 iLQR 靠模型近似与梯度信息。
+* 在实践中，MPPI 可用于实时控制与规划，尤其在模型高度非线性、环境动态变化时。
+
+---
+
+#### 4. MPC：模型预测控制
+
+##### 4.1 方法概述
+
+![Image](https://www.researchgate.net/publication/269398882/figure/fig5/AS%3A668229370404878%401536329705644/The-receding-horizon-concept-of-Model-Predictive-Control-By-Martin-Behrendt-via.png)
+
+![Image](https://i.stack.imgur.com/lYqJ3.png)
+
+![Image](https://www.researchgate.net/publication/228969094/figure/fig2/AS%3A393643073523715%401470863230608/Block-diagram-schematic-of-Model-Predictive-Control-highlighting-the-introduction-of.png)
+
+![Image](https://www.researchgate.net/publication/347806574/figure/fig1/AS%3A974355966205952%401609315973123/Block-diagram-of-model-predictive-control.png)
+
+![Image](https://www.researchgate.net/publication/381740282/figure/fig3/AS%3A11431281260534724%401721098860921/A-block-diagram-illustrating-the-nonlinear-model-predictive-control-NMPC-strategy-for.png)
+
+![Image](https://www.mdpi.com/robotics/robotics-12-00067/article_deploy/html/images/robotics-12-00067-g001.png)
+
+* MPC（Model Predictive Control）是一种基于模型的优化控制方法：在每个时刻，基于当前状态和系统模型，预测未来 N 步的状态演化，求解优化问题（最小化代价且满足约束），然后执行第一步控制，时间推进后重复。 ([control.com](https://control.com/technical-articles/what-is-model-predictive-control-mpc/?utm_source=chatgpt.com "What is Model Predictive Control (MPC)? - Technical Articles"))
+* 典型优化形式（离散时间）：
+  [
+  \\min\_{u\_{0:N-1}} \\sum\_{k=0}^{N-1} \\ell(x\_k,u\_k) + \\ell\_f(x\_N)
+  \\quad
+  \\text{s.t. } x\_{k+1}=f(x\_k,u\_k),; (x\_k,u\_k)\\in\\mathcal X\\times\\mathcal U
+  ]
+  然后只使用 (u\_0)，前移至下一个时刻。
+
+##### 4.2 优势与局限
+
+**优势**
+
+* 明确考虑系统约束（状态约束、输入约束）。 ([mtsu.pressbooks.pub](https://mtsu.pressbooks.pub/robotics/chapter/model-predictive-control/?utm_source=chatgpt.com "Model Predictive Controller – Robotics and ..."))
+* 预测未来行为、具有较好的鲁棒性。
+* 在工业与机器人应用中被广泛采用。
+
+**局限**
+
+* 计算量大：每个时刻都需求解优化问题，对实时系统要求苛刻。
+* 模型精度要求高：预测模型误差可能影响效果。
+* 在高度非线性或大规模系统中可能难以实时执行。
+
+##### 4.3 MPC 与 iLQR／MPPI 的关系
+
+* iLQR + MPC：用 iLQR 求解短时优化问题，再作为 MPC 控制器。
+* MPPI + MPC：MPPI 可视为一种采样型的 MPC 实现。
+* MPC 是一个更“框架化”的方法，iLQR／MPPI 是其实现方式之一（或近似／特例）。
+
+---
+
+#### 5. TrajOpt：轨迹优化在规划中的应用
+
+##### 5.1 方法概述
+
+![Image](https://roboticseabass.com/wp-content/uploads/2024/06/manip_intro_banner-1568x606.png)
+
+![Image](https://manipulation.csail.mit.edu/figures/gcs_simple_2d_fifth_order_min_time.svg)
+
+![Image](https://moveit.picknik.ai/main/_images/trajopt.png)
+
+![Image](https://moveit.picknik.ai/main/_images/req_traj.png)
+
+![Image](https://www.frontiersin.org/files/Articles/724116/fnbot-15-724116-HTML/image_m/fnbot-15-724116-g001.jpg)
+
+![Image](https://pub.mdpi-res.com/entropy/entropy-24-00653/article_deploy/html/images/entropy-24-00653-ag-550.jpg?1652256370=)
+
+* TrajOpt（Trajectory Optimization，尤其在机器人运动规划领域）是一种将运动规划问题转化为数学优化的问题：通过 Sequential Convex Programming (SCP) 或信赖域 SQP 等方式，对关节/路径/时间参数化轨迹求最优解。 ([rll.berkeley.edu](https://rll.berkeley.edu/trajopt/ijrr/2013-IJRR-TRAJOPT.pdf?utm_source=chatgpt.com "Motion Planning with Sequential Convex Optimization and ..."))
+* 举例：在 MoveIt 框架中，TrajOpt 可用于机械臂从起点到目标的关节路径优化。
+* 优化变量通常是 (q\_0, q\_1, …, q\_T) （关节位置或笛卡尔位置），代价包括轨迹长度、速度、加速度、与障碍物的距离等；约束包括动力学、碰撞、关节限位。
+
+##### 5.2 优势与局限
+
+**优势**
+
+* 能生成连续、可执行的轨迹，直接用于机器人运动规划。
+* 可以处理碰撞、约束、关节限位等常见规划问题。
+* 相比抽样-基（如 RRT），优化方法产生的轨迹更光滑、更短。 ([swri.org](https://www.swri.org/what-we-do/internal-research-development/2018/manufacturing-construction/trajectory-optimization-motion-planning-ros-10-r8831?utm_source=chatgpt.com "Trajectory Optimization for Motion Planning in ROS, 10- ..."))
+
+**局限**
+
+* 属于局部优化：初始轨迹猜测质量对结果影响大。
+* 遇到复杂非凸约束（如复杂障碍物场景）时可能陷入局部最优或失败。
+* 通常假设较少动力学耦合或忽略高阶动态。
+
+### 5.3 与控制方法的关系
+
+* TrajOpt 生成的轨迹可以作为 iLQR／MPC／MPPI 的参考轨迹或初始化，从而提升控制性能。
+* 相反，在控制阶段（如 MPC ）生成的实时轨迹也可视为一种 TrajOpt 延伸。
+* 因此，TrajOpt 偏向“规划层”，而 iLQR/MPPI/MPC 偏向“控制层”；两者结合是机器人运动系统典型结构。
+
+---
+
+#### 6. 方法比较与适用指南
+
+| 方法    | 典型应用场景                                  | 优势                   | 主要局限                 |
+| --------- | ----------------------------------------------- | ------------------------ | -------------------------- |
+| iLQR    | 轨迹优化 & 控制（系统模型已知、实时要求中等） | 收敛快、结构化         | 约束处理弱、可能陷入局部 |
+| MPPI    | 动态环境下的实时控制（比如无人机避障）        | 适应非线性、采样灵活   | 计算量大、实时性挑战     |
+| MPC     | 多约束、多变量系统实时控制                    | 约束处理强、预测能力强 | 求解时间高、模型依赖强   |
+| TrajOpt | 运动规划（机械臂、机器人路径）                | 轨迹光滑、规划质量高   | 动态响应弱、实时性较低   |
+
+​**适用建议**​：
+
+* 若系统已知、约束少、实时要求不是极高 → 可考虑 iLQR。
+* 若环境动态、障碍复杂、系统非线性强 → MPPI 是好选择。
+* 若系统多输入多输出、约束众多（例如车辆、机器人手臂） → MPC 为主流。
+* 若侧重规划阶段（路径生成／运动规划） → TrajOpt 为合适工具。
+* 实际系统中，**规划 + 控制**结合更佳：例如 TrajOpt 规划轨迹 → iLQR/MPC 执行控制。
+
+---
+
+#### 7. 发展趋势与挑战
+
+##### 7.1 趋势
+
+* 将 机器学习／深度学习与这些控制／规划方法结合：如 “Neural-MPC” 将 NN 模型与 MPC 结合。 ([arxiv.org](https://arxiv.org/abs/2203.07747?utm_source=chatgpt.com "Real-time Neural-MPC: Deep Learning Model Predictive Control for Quadrotors and Agile Robotic Platforms"))
+* 更强的实时性、嵌入式硬件部署、小批量高频更新。
+* 多模态、复杂机器人系统（带接触、柔体、无人机、多人系统）中的应用。
+* 从单轨迹优化到​**分布式／随机化控制**​（例如 MPPI 在不确定环境中的扩展） ([par.nsf.gov](https://par.nsf.gov/servlets/purl/10411187?utm_source=chatgpt.com "Trajectory Distribution Control for Model Predictive Path ..."))
+
+##### 7.2 主要挑战
+
+* 在保证实时性的同时，处理高维、非线性、带约束系统仍然困难。
+* 模型误差／扰动／不确定性对性能影响大。
+* 规划与控制层如何更紧密整合：轨迹优化结果如何快速转化为控制可用信号。
+* 可靠性、安全性（尤其在与人交互、无人环境中）仍是关键。
+
+
+
 * 4.5 扩散与生成：条件扩散、动作分布建模
 * 4.6 世界模型：潜在动力学与想象训练
 
