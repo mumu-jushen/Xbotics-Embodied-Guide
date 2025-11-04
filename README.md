@@ -2075,8 +2075,7 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 对比学习通过“拉近正样本对”（positive pair）和“推远负样本对”（negative pair）来训练模型。
   ![The Beginner's Guide to Contrastive Learning](https://framerusercontent.com/images/BTYwexvG8pobxihJcbBy0Vp4aE.png?height=1124&width=1600)
   ![Full Guide to Contrastive Learning | Encord](https://images.prismic.io/encord/fb3171a4-933d-4d63-8be3-8da581413db0_image1.png?auto=compress%2Cformat)
-  ![The t-SNE [85] visualizations of learned feature spaces using SimCLR... |  Download Scientific Diagram](https://www.researchgate.net/publication/355729857/figure/fig3/AS%3A1084085812371456%401635477607010/The-t-SNE-85-visualizations-of-learned-feature-spaces-using-SimCLR-16-and-IP-IRM-on.png)
-例如，在图像领域，给定一张图片，通过数据增强生成两个视图视为正样本对，而其他图片的视图视为负样本。模型学习特征，使得正样本对在嵌入空间距离更近。这个机制被证明能学到非常强的视觉特征。
+在图像领域，给定一张图片，通过数据增强生成两个视图视为正样本对，而其他图片的视图视为负样本。模型学习特征，使得正样本对在嵌入空间距离更近。这个机制被证明能学到非常强的视觉特征。
 
 
 ##### 2.2 对比学习在多模态中的延伸
