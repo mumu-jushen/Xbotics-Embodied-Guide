@@ -33,7 +33,7 @@
 
 ## 贡献者
 
-@Xbotics-木木、@Xbotics-土豆、@FTZP、@Kands、@maomao725
+@Xbotics-木木、@Xbotics-土豆、@FTZP、@KandS、@maomao725
 
 > 🎯 想加入？见文末「如何贡献」。
 
@@ -350,23 +350,24 @@
 
 ## 2. 各技术学习路线（Roadmaps）
 
-**贡献者**：@owner，@bob
+**贡献者**：@KandS
 
 > 每条路线 = 前置要求 → 4–8 周分周计划 → 里程碑 → 作业与验收 → 延伸阅读
 
 **小标题**
 
-* 2.1 模仿学习（BC/DAgger）
-* 2.2 强化学习（PPO/SAC+iLQR/MPPI）
-* 2.3 视觉与多模态（2D/3D/CLIP/SigLIP）
-* 2.4 规划与控制（RRT*/TrajOpt/MPC）
-* 2.5 触觉与力控（阻抗/导纳/传感融合）
-* 2.6 VLA（OpenVLA/RT-2/π0）
-* 2.7 Diffusion Policy（条件扩散策略）
-* 2.8 世界模型（Dreamer/潜在动力学）
-* 2.9 数据飞轮与遥操作（Teleop→清洗→训练→回流）
-* 2.10 Sim2Real（域随机化/对齐/自适应）
-* 2.11 评测与 Benchmark（标准化日志与指标）
+* [2.1 模仿学习（BC/DAgger）](#21-模仿学习bcdagger路线)
+* [2.2 强化学习（PPO/SAC+iLQR/MPPI）](#22-强化学习pposacilqrmpii路线)
+* [2.3 视觉与多模态（2D/3D/CLIP/SigLIP）](#23-视觉与多模态2d3dclipsiglip路线)
+* [2.4 规划与控制（RRT*/TrajOpt/MPC）](#24-规划与控制rrttrajoptmpc路线)
+* [2.5 触觉与力控（阻抗导纳传感融合）](#25-触觉与力控阻抗导纳传感融合路线)
+* [2.6 VLA（OpenVLA/RT-2/π0）](#26-vlaopenvlart-2π0路线)
+* [2.7 Diffusion Policy（条件扩散策略）](#27-diffusion-policy条件扩散策略路线)
+* [2.8 世界模型（Dreamer/潜在动力学）](#28-世界模型dreamer潜在动力学路线)
+* [2.9 数据飞轮与遥操作（Teleop→清洗→训练→回流）](#29-数据飞轮与遥操作teleop清洗训练回流路线)
+* [2.10 Sim2Real（域随机化/对齐/自适应）](#210-sim2real域随机化对齐自适应路线)
+* [2.11 评测与 Benchmark（标准化日志与指标）](#211-评测与-benchmark标准化日志与指标路线)
+
 
 **通用路线模板**
 
@@ -381,6 +382,121 @@
 - 延伸：<论文/代码/数据集 3–6 条>
 - 贡献者：@yourname
 ```
+
+#### 2.1 模仿学习（BC/DAgger）路线
+- 前置要求：MDP、监督学习基础
+- 周程：
+  - 第 1–2 周：运行 Imitation 库 BehaviorCloning 脚本，复现 CartPole 专家轨迹复现
+  - 第 3–4 周：PyBullet 机械臂对比 1D-CNN 与 MLP 的 BC 成功率；DAgger 用专家模型再标注并绘制策略漂移曲线
+  - 第 5–8 周：PyBullet Kuka 拾取方块：采集 500 条专家轨迹→BC→DAgger 两阶段训练，成功率≥75%，输出轨迹可视化+误差热力图+消融表
+- 里程碑：单任务成功率≥75%，BC/DAgger success-rate vs. epoch 单图对比
+- 常见坑：动作未归一化损失爆炸；专家轨迹长度不齐 RNN 打包 pad 错；DAgger 迭代间隔长策略漂移；观测含冗余 RGB 训练慢 5×；PyBullet 时间步与采集频率不一致动作重放失败
+- 延伸：BC-IMP/AggreVaTe；imitation/robomimic/LeRobot
+
+#### 2.2 强化学习（PPO/SAC+iLQR/MPPI）路线
+- 前置要求：MDP、策略梯度基础
+- 周程：
+  - 第 1–2 周：Stable-Baselines3 PPO 在 Gymnasium Pendulum-v1 复现
+  - 第 3–4 周：PyBullet 连续控制任务对比 SAC 与 PPO 回报；RLlib 并行 4 种子绘制学习曲线
+  - 第 5–8 周：Meta-World 单臂三任务（reach→pick→place）：SAC 预训练 2M 步→iLQR/MPPI 精调，平均成功率≥85%，输出收敛曲线+消融表
+- 里程碑：连续控制平均回报≥-120，三任务成功率≥85%，SAC/iLQR 对比单图
+- 常见坑：动作未 clip 致 NaN；奖励尺度 1e-3 太小 SAC 熵崩；iLQR 线性化步长太大发散；MPPI 采样不足噪声淹没梯度；PyBullet 240 Hz 与控制器 30 Hz 不匹配
+- 延伸：DDPG/TD3；SB3/RLlib/crocoddyl
+
+#### 2.3 视觉与多模态（2D/3D/CLIP/SigLIP）路线
+- 前置要求：CNN/点云基础、OpenCV/Open3D 环境、机器人学基础
+- 周程：
+  - 第 1–2 周：Detectron2 Mask R-CNN 在自定义 2D 数据集跑通
+  - 第 3–4 周：Open3D-ML PointNet 语义分割替换 backbone 并对比 mIoU；在 YCB-Video 上复现 PoseCNN-PyTorch 6D 姿态
+  - 第 5–8 周：PyBullet 机械臂抓取闭环：Mask R-CNN 实例分割→PoseCNN 位姿→Dex-Net 评分→执行，成功率≥75%，输出可视化+误差表
+- 里程碑：单物体抓取成功率≥75%，2D/3D 掩码与 6D 姿态误差单图对比
+- 常见坑：点云缺失深度补零致分割空洞；PoseCNN 关键点 heatmap 阈值敏感；Dex-Net 评分高但碰撞仍失败；PyBullet 相机内参未标定偏移；ROS 时间戳不一致致手眼标定漂移
+- 延伸：Mask R-CNN/PointNet/PoseCNN/Dex-Net；Detectron2/Open3D-ML/PoseCNN-PyTorch/dex-net
+
+#### 2.4 规划与控制（RRT*/TrajOpt/MPC）路线
+- 前置要求：正逆运动学/Jacobian、ROS基础
+- 周程：
+  - 第1–2周：运行fan-ziqi/ModernRoboticsCpp_CN正逆运动学例程；在PyBullet中搭建6-DOF机械臂可视化
+  - 第3–4周：用PSO-LQR本地规划器插件(nobleo/psolqr_local_planner)生成关节空间轨迹；对比三次B样条平滑与RRT*路径曲率
+  - 第5–8周：Meta-World单臂「pick-place」任务：TrajOpt生成任务空间轨迹→MPC跟踪，位置误差≤1 cm，输出轨迹/误差/力矩三图
+- 里程碑：轨迹位置误差≤1 cm，MPC与PID对比误差曲线单图
+- 常见坑：RRT*碰撞检测网格分辨率大漏检；TrajOpt约束Jacobian维度错；MPC采样周期>20 ms控制发散；PyBullet关节力矩传感器未使能；PSO初值范围过大收敛慢
+- 延伸：RRT*/TrajOpt/MPC/Impedance Control；psolqr_local_planner/TrajOpt/mppi_examples
+
+#### 2.5 触觉与力控（阻抗/导纳/传感融合）路线
+- 前置要求：逆动力学/ROS、Gazebo基础
+- 周程：
+  - 第1–2周：ros_control加载Gazebo FT传感器插件，跑通MIT6.141力位混合示例；PyBullet调试ImpedanceControl刚度0.1/1/10对比
+  - 第3–4周：Tacto仿真GelSight图像→CNN特征，融合MaskR-CNN视觉分割，训练软/硬二分类，准确率≥90%
+  - 第5–8周：Digit+MPC瓶盖旋开：触觉图像输入→MPC力矩输出，旋开成功率≥80%，输出力曲线+触觉视频
+- 里程碑：软/硬分类≥90%，旋开成功率≥80%，力-位移相平面图单图
+- 常见坑：FT漂移未实时校零；GelSight反光致图像过曝；MPC权重矩阵对角线过大振荡；Digit无GPU延迟>50ms；URDF柔性关节参数缺失
+- 延伸：Impedance/Admittance/HybridPositionForce；Tacto/DigitTactile/TactileMPC
+
+#### 2.6 VLA（OpenVLA/RT-2/π0）路线
+- 前置要求：Transformer/CLIP/SigLIP基础
+- 周程：
+  - 第1–2周：pip install openvla，在Bridge-v2离线推理“pick the blue cube”指令，成功率≥70%
+  - 第3–4周：替换SigLIP视觉编码器→对比CLIP编码器，微调LoRA秩16/64两档，Bridge-v2成功率提升≥5%
+  - 第5–8周：π0单臂+双臂桌面整理：语言指令→多步策略，10步指令成功率≥80%，输出语言-动作对齐热图+视频
+- 里程碑：单步指令≥70%，10步指令≥80%，语言-动作注意力可视化单图
+- 常见坑：序列长度>2048显存溢出；语言提示歧义致动作偏移；双臂动作token混叠；RT-2量化后精度下降；Bridge相机内参未标定重投影误差大
+- 延伸：OpenVLA/RT-2/π0；Hydra/Accelerate/LoRA；Bridge/Libero/Open-X
+
+#### 2.7 Diffusion Policy（条件扩散策略）路线
+- 前置：Python/PyTorch；理解轨迹/动作参数化
+- 周程：
+  - 第1–2周：跑通 `train_dp.py`
+  - 第3-4周：更换视觉编码器（SigLIP）/动作表示
+  - 第5-8周：加入遥操作数据，完成桌面抓取
+- 里程碑：成功率≥80%，采样/去噪可视化
+- 坑：时间对齐、动作尺度、采样步数引入时延
+- 延伸：DP/ACT/LEAP；Bridge/RT-*；W&B/TensorBoard
+
+
+#### 2.8 世界模型（Dreamer/潜在动力学）路线
+- 前置要求：概率图模型、变分自编码器（VAE）、RL 基础
+- 周程：
+  - 第1–2周：安装并运行 DreamerV2 (danijar/dreamerv2)，在 DeepMind Control Suite "walker-walk" 任务上复现训练曲线（reward ≥ 500）
+  - 第3–4周：将 encoder 从 CNN 替换为 ResNet18 backbone，比较重构误差与 reward；测试 latent dimension 对性能的影响
+  - 第5–8周：在 Meta-World “reach-v2” 上自建 latent-dynamics 模型（RSSM/latent transition），以 learned world model rollout 进行 imagination-based policy learning，目标成功率≥75%，输出 imagination trajectory 可视化+reconstruction video
+- 里程碑：latent rollout 成功预测≥10 steps；imagination policy 成功率≥75%；reconstruction loss ≤0.02
+- 常见坑：VAE 重构损失未加权 KL collapse；RSSM 隐变量未 detach 导致梯度爆炸；imagination rollout 步长过长误差累积；actor critic 未共享 latent encoder；观测归一化不一致
+- 延伸：DreamerV3/Planet/Dyna；danijar/dreamerv2/dreamerv3；DeepMind Control Suite/Meta-World
+
+
+#### 2.9 数据飞轮与遥操作（Teleop→清洗→训练→回流）路线
+- 前置要求：ROS2/MoveIt、PyBullet 或 RealSense SDK、PyTorch 基础
+- 周程：
+  - 第1–2周：使用 LeRobot 或 Bridge Teleop 采集 1000 条机械臂 teleop 轨迹（obs/action/reward）并保存为 HDF5
+  - 第3–4周：robomimic.data 清洗与对齐轨迹，过滤异常帧、统一时间步，t-SNE 可视化数据分布
+  - 第5–6周：用清洗后数据训练 BC 或 Diffusion Policy，在 Bridge-v2 场景测试成功率≥70%
+  - 第7–8周：搭建数据飞轮闭环（Teleop→Clean→Train→Deploy→Collect）自动回流系统
+- 里程碑：清洗后性能提升≥10%；飞轮循环一次成功；输出成功率曲线与数据分布图  
+- 常见坑：Teleop 频率与采样不同步；HDF5 读写慢；异常帧过滤过严；归一化不一致；随机种子未固定  
+- 延伸：robomimic/LeRobot/Bridge/act-data-tools；DataFlywheel/Offline-to-Online；Bridge/Libero/RT-1/Open-X
+
+
+#### 2.10 Sim2Real（域随机化/对齐/自适应）路线
+- 前置要求：PyBullet基础
+- 周程：
+  - 第1–2周：克隆ammar-n-abbas/sim2real-ur-gym-gazebo→Gazebo训练UR5抓取策略，Sim成功率≥95%
+  - 第3–4周：按项目README配置真实UR5+RealSense→记录Sim与Real成功率差，下降≤10%
+  - 第5–8周：插入域随机化（光照/摩擦随机采样）再训练→Real成功率≥80%，输出对比视频
+- 里程碑：Sim≥95%，Real≥80%，差距≤10%，对比视频
+- 常见坑：Gazebo关节力矩限界未设；真实相机内参未标定；随机光照过曝；URDF质量与真实不符；增量训练学习率过大
+- 延伸：DomainRandomization/ProgressiveNets/InverseDynamics；sim2real-ur-gym-gazebo/spot-sim2real/lang4sim2real
+
+#### 2.11 评测与 Benchmark（标准化日志与指标）路线
+- 前置要求：熟悉 W&B / TensorBoard、Pandas/Numpy 数据处理
+- 周程：
+  - 第1–2周：统一 RL 训练日志格式（episode_reward、success_rate、loss）→ 转换为 CSV 并用 pandas 绘制 reward 曲线
+  - 第3–4周：基于 robometrics/robobench 运行三类基准任务（push/pick/place），记录成功率与耗时，生成标准化 report.json
+  - 第5–8周：集成 W&B 项目 pipeline，实现多实验自动汇总；生成包含 success-rate、efficiency、energy、smoothness 的雷达图；输出 PDF 报告模板
+- 里程碑：log schema 标准化；3 任务可对比指标一致；可一键生成 report 图表
+- 常见坑：不同 env 日志字段名不统一；采样周期不匹配导致曲线错位；success-rate 未加权平均误差；CSV 精度过低导致统计波动；matplotlib 中文字体错误
+- 延伸：RoboBench / RoboMimic Metrics / W&B Sweeps；robometrics / wandb / tensorboardX / matplotlib / pandas
+
 
 **样板 A｜Diffusion Policy 路线（可直接用）**
 
