@@ -642,15 +642,15 @@
     - 世界模型（World Model） → Dreamer → DreamerV2 → DreamerV3
     - 模拟器替代学习（Model-Based RL, MBRL）
   - **材料**：
-    - [World Models (Ha & Schmidhuber, 2018)](https://arxiv.org/abs/1803.10122)：提出以VAE+MDN-RNN结构学习环境动力学
-    - [DreamerV2 (Hafner et al., 2021)](https://arxiv.org/abs/2010.02193)：基于潜在动力学的MBRL算法，能在潜空间中进行长序列规划
+    - [World Models (Ha & Schmidhuber, 2018)](https://arxiv.org/abs/1803.10122)：提出以 VAE+MDN-RNN 结构学习环境动力学
+    - [DreamerV2 (Hafner et al., 2021)](https://arxiv.org/abs/2010.02193)：基于潜在动力学的 MBRL 算法，能在潜空间中进行长序列规划
     - [DreamerV3 (Hafner et al., 2023)](https://arxiv.org/abs/2301.04104)：实现跨任务通用性与高样本效率
     - [PlaNet (Hafner et al., 2019)](https://arxiv.org/abs/1811.04551)：基于潜在空间预测与规划的开创性算法
 - **实践**：
   - **工具**：
-    - [DreamerV3 Official Implementation](https://github.com/danijar/dreamerv3)：作者官方PyTorch实现
+    - [DreamerV3 Official Implementation](https://github.com/danijar/dreamerv3)：作者官方 PyTorch 实现
     - [Planet / Dreamer Reimplementation (PyTorch)](https://github.com/facebookresearch/torchbeast)：支持可并行训练和多环境实验
-    - [gymnax](https://github.com/RobertTLange/gymnax)：JAX强化学习环境库，常用于Dreamer训练
+    - [gymnax](https://github.com/RobertTLange/gymnax)：JAX 强化学习环境库，常用于 Dreamer 训练
   - **最小目标**：使用 Dreamer 复现 CartPole / Cheetah 环境中的潜在动力学预测；在潜空间进行“虚拟环境”训练
   - **进阶目标**：结合 PyBullet 或 Isaac Gym 训练机械臂模型的世界模型，实现从视觉输入预测未来状态，并基于潜在动力学进行规划
 - **延伸**：
@@ -659,53 +659,44 @@
     - [World Model Policy Gradient (WM-PG)](https://github.com/icoz69/WM-PG)：使用潜在空间规划指导 RL 策略学习
     - [MIRAGE](https://github.com/robustrobotics/MIRAGE)：结合世界模型与规划的多模态机器人控制系统
   - **工具**：
-    - [BraX](https://github.com/google/brax)：GPU/TPU加速的物理仿真平台，可快速验证Dreamer类算法
+    - [BraX](https://github.com/google/brax)：GPU/TPU 加速的物理仿真平台，可快速验证 Dreamer 类算法
     - [Isaac Gym](https://developer.nvidia.com/isaac-gym)：用于多任务并行的世界模型训练与验证
 
 ---
 
 #### 2.10 数据飞轮与遥操作
 
-- **前置要求**：ROS2 / Isaac Sim / 数据工程基础（数据清洗、标注、版本控制）
+- **前置要求**：强化学习 / 模仿学习 / 数据工程基础（数据清洗、标注、版本控制）
 - **理论**：
-  - **基础**：
-    - 远程示教（Teleoperation） → 数据收集 → 数据清洗与标注 → 策略训练（RL/IL） → 策略部署 → 新数据回流
-    - 数据飞轮（Data Flywheel）：数据 → 模型 → 任务 → 数据 的持续自增强循环
-    - 远程示教方式：力反馈遥操作 / AR/VR 远程控制 / 模型辅助示教（e.g. Diffusion Policy Warm-start）
+  - **基础**：数据飞轮与遥操作概念 → 力反馈遥操作 → AR/VR 远程控制 → 模型辅助示教（e.g. Diffusion Policy Warm-start）
   - **材料**：
-    - [ALOHA: Learning Dexterous Bimanual Manipulation from Human Demonstration](https://arxiv.org/abs/2305.19352)：通过遥操作收集人类示教数据，形成自增强数据闭环
-    - [ACT (Action Chunking Transformers)](https://arxiv.org/abs/2305.19354)：动作分块方法，用于高效示教数据压缩
-    - [Data Flywheel for Robotics (DeepMind Blog, 2024)](https://www.deepmind.com/blog)：提出机器人自进化数据循环体系
-    - [Pi0 (n0)](https://arxiv.org/abs/2406.14491)：语言条件遥操作 → 模型训练 → 策略回流 的通用VLA框架
+    - [Tele-operation & Flywheel](https://medium.com/@chaseyvy/teleoperation-the-human-link-and-flywheel-of-physical-ai-1c5b82ba1c80)：：数据飞轮与遥操作基础概念博客
+    - [PATO](https://arxiv.org/abs/2212.04708)：提出“策略辅助遥操作”框架，使人机协作更高效，助力可扩展数据采集
+    - [Open-TeleVision](https://arxiv.org/html/2407.01512v2)：沉浸式视觉遥操作系统，用于高质量示教数据采集
 - **实践**：
   - **工具**：
     - [ALOHA](https://github.com/tonyzhaozh/aloha)：低成本双臂遥操作系统，提供数据采集与回放脚本
-    - [Isaac ROS Teleop](https://github.com/NVIDIA-ISAAC-ROS)：ROS2 遥操作接口，支持操纵器与移动机器人
-    - [RoboFlow / FiftyOne](https://github.com/voxel51/fiftyone)：数据集管理、清洗与可视化工具
-    - [LeRobot](https://github.com/huggingface/lerobot)：支持遥操作数据采集与基于 Diffusion Policy 的训练回路
-    - [Hugging Face Hub + DVC](https://dvc.org/)：实现数据版本控制与模型版本同步
+    - [Open-TeleVision](https://github.com/OpenTeleVision/TeleVision)：沉浸式远程控制与反馈系统
   - **最小目标**：使用 ALOHA 系统采集单任务（如物体抓取）数据 → 训练一个 BC 策略 → 使用同样系统部署策略并采集新演示数据
   - **进阶目标**：构建完整数据飞轮管线：通过 Teleop 采集数据 → 进行自动清洗与标准化 → 使用 Diffusion Policy / OpenVLA 训练模型 → 策略部署到实机 → 新数据自动回流、增强数据集
 - **延伸**：
   - **项目**：
-    - [ALOHA2](https://github.com/tonyzhaozh/aloha)：改进版双臂系统，支持多模态控制与动作回放
-    - [RoboSync](https://github.com/robosync/robosync)：跨机器人数据同步与飞轮构建框架
-    - [Grasp Data Loop](https://github.com/robot-learning-lab/grasp-data-loop)：基于抓取任务的数据飞轮实现
+    - [SharedAssembly](https://arxiv.org/abs/2503.12287)：通过双操作员共享遥操作系统，提升装配任务数据采集规模与质量
+    - [Super-Linear Scaling](https://arxiv.org/html/2412.01770v3)：通过众包真实场景数字孪生并在仿真中采集数据，实现“人力投入与性能超线性增长”的机器人学习飞轮
+    - [DexFlyWheel](https://arxiv.org/html/2509.23829v1)：提出双臂灵巧操作的数据飞轮机制，从少量人类示范出发，通过 IL + residual RL 实现自增强数据生成。  
   - **工具**：
-    - [Tensorboard + MLflow](https://mlflow.org/)：用于监控训练与数据更新过程
-    - [ROS2 Bag + Isaac Recorder](https://docs.omniverse.nvidia.com/isaacsim/latest/record-playback/index.html)：用于遥操作与训练数据同步记录
-
+    - [MLflow](https://mlflow.org/)：用于监控训练与数据更新过程
 
 ---
 
 ## 3. 基础学习（机器人基础｜深度学习基础）
 
-**贡献者**：@mumu-jushen，@alice
+**贡献者**：@mumu-jushen，@KandS
 **你将获得**：机器人学数学基础、深度学习核心机制、工程实践能力；从"坐标变换→运动规划→神经网络→多模态融合"构建知识体系。
 
 ### 目录（Table of Contents）
 - [3.1 机器人学打底：坐标系/运动学/动力学/控制](#31-机器人学打底坐标系运动学动力学控制)
-- [3.2 深度学习打底：Self-Attention与Transformer](#32-深度学习打底self-attention与transformer)
+- [3.2 深度学习打底：Self-Attention 与 Transformer](#32-深度学习打底self-attention与transformer)
 - [3.3 深度学习打底：Diffusion (DDIM)](#33-深度学习打底diffusion-ddim)
 - [3.4 深度学习打底：优化/正则化/训练技巧](#34-深度学习打底优化正则化训练技巧)
 - [3.5 工程环境：Conda/Docker、日志与可视化、复现实验规范](#35-工程环境condadocker日志与可视化复现实验规范)
