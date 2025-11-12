@@ -4192,6 +4192,7 @@ Running Cosmos Transfer1 is not currently supported on the DGX Spark.
 各安装方式具体安装方法细则见官方文档[https://docs.robotsfan.com/isaaclab/source/setup/installation/index.html](https://docs.robotsfan.com/isaaclab/source/setup/installation/index.html)
 
 **快速入门 (推荐)**
+
 对于大多数用户来说，安装 Isaac Lab 最简单最快的方法是按照 使用 Isaac Sim Pip 包安装 指南操作。
 
 这种方法将通过pip安装Isaac Sim，并通过其源代码安装Isaac Lab。如果您是Isaac Lab的新手，请从这里开始。
@@ -4269,6 +4270,7 @@ $> python scripts/environments/list_envs.py
 请注意，有两种不同的 Ant 任务，一种是用于 Direct 环境，另一种是用于 ManagerBased 环境。这是您可以在 Isaac Lab 立即使用的 两个主要工作流程 。Direct 工作流程将为您提供最快速通往用于强化学习的工作自定义环境的路径，但 Manager based 工作流程将为您的项目提供更广泛开发所需的模块化。出于本快速入门指南的目的，我们只会专注于 Direct 工作流程。
 
 **生成您自己的项目**
+
 使用 Isaac Lab 开始新项目起初可能会让人望而生畏，但这就是为什么我们提供 模板生成器 ，通过命令行快速生成新项目的原因。
 
 ```Shell
@@ -4307,7 +4309,7 @@ gym.register(
 
 这是实际为将来使用注册环境的函数。请注意， entry_point 实际上只是环境定义的 python 模块路径。这就是为什么我们需要将项目安装为包: 模块路径 就是 gymnasium API 的入口点。
 
-***配置**
+**配置**
 
 无论您在 Isaac Lab 中要做什么，您都需要处理**配置** 。所有配置类都可以通过它们的类定义上方的 @configclass 装饰器和缺少 __init__ 函数来识别。例如，考虑下面这个关于 cartpole 环境 的配置类。
 
@@ -4349,7 +4351,7 @@ class CartpoleEnvCfg(DirectRLEnvCfg):
 
 在这种情况下，该类定义了整个训练环境的配置！请注意 InteractiveSceneCfg 中的 num_envs 变量。这实际上会被 train.py 脚本内部的 CLI 参数所覆盖。配置提供了一条通往配置层次结构中的任何变量的直接路径，从而轻松修改在启动时由环境“配置”的任何内容。
 
-***机器人**
+**机器人**
 
 在 Isaac Lab 中，机器人完全被定义为配置的实例。如果您检查 source/isaaclab_assets/isaaclab_assets/robots ，您将看到许多文件，每个文件都包含了有关所讨论机器人的配置。这些单独的文件的目的是更好地定义所有不同机器人的范围，但没有任何阻止您 向您的项目添加新的机器人 ，甚至添加到 isaaclab 存储库中！例如，考虑以下配置中的 Dofbot
 
@@ -4449,26 +4451,31 @@ Isaac Lab 资产托管在 AWS S3 云存储 上。 加载时间可能会因您的
 
 [https://docs.omniverse.nvidia.com/](https://docs.omniverse.nvidia.com/)
 [https://developer.nvidia.com/isaac/sim ](https://developer.nvidia.com/isaac/sim )
+
 omniverse 开发者文档 [https://docs.omniverse.nvidia.com/dev-guide/latest/index.html](https://docs.omniverse.nvidia.com/dev-guide/latest/index.html)
+
 isaac sim 开发者文档 [https://docs.omniverse.nvidia.com/isaacsim/latest/index.html](https://docs.omniverse.nvidia.com/isaacsim/latest/index.html)
+
 isaac lab 开发者文档 [https://isaac-sim.github.io/IsaacLab/](https://isaac-sim.github.io/IsaacLab/)
+
 isaac sim 写代码 API 参考文档 [https://docs.omniverse.nvidia.com/py/isaacsim/index.html](https://docs.omniverse.nvidia.com/py/isaacsim/index.html)
+
 isaac extension 文档 [https://docs.omniverse.nvidia.com/py/isaacsim/index.html](https://docs.omniverse.nvidia.com/py/isaacsim/index.html)
+
 ros ros2 文档 [https://docs.omniverse.nvidia.com/isaacsim/latest/ros_ros2_tutorials.html](https://docs.omniverse.nvidia.com/isaacsim/latest/ros_ros2_tutorials.html)
+
 isaac lab 官方文档 [https://docs.robotsfan.com/isaaclab/source/setup/quickstart.html
 ](https://docs.robotsfan.com/isaaclab/source/setup/quickstart.html
 )
-
-https://player.bilibili.com/player.html?bvid=BV1a44y1N79U&autoplay=0
-AI 仓库：使用 Isaac Sim 和 Isaac ROS 实现视觉导航
-Autonomous machines are forecasted to dramatically increase the efficiency of warehouses, factories, and other industrial environments. NVIDIA Isaac ROS GEMs enable novel applications by empowering robots to intelligently perceive complex 3D environments. In this video, we showcase a camera-based navigation pipeline in which a robot uses NVIDIA’s GPU-accelerated visual SLAM algorithm (https://github.com/NVIDIA-ISAAC-ROS/i...) to find its location in the world. GPU-accelerated, real-time 3D scene reconstruction (https://github.com/NVIDIA-ISAAC-ROS/i...) is used to map its environment and plan collision-free trajectories. Finally, we demonstrate how Replicator, which is part of NVIDIA Isaac Sim (https://developer.nvidia.com/isaac-sim), can be used to procedurally generate industrial spaces in which to develop and validate robotics systems. Empower your robot with GPU-accelerated robotics algorithms today!
-
 
 **视频教程**
 
 [https://player.bilibili.com/player.html?bvid=BV1B24y1s7Hc&autoplay=0](https://player.bilibili.com/player.html?bvid=BV1B24y1s7Hc&autoplay=0)
 讲义在百度网盘
 资料链接： [https://pan.baidu.com/s/1RGOQ4UOwcEGEhWMZRyfDXA?pwd=kvq7](https://pan.baidu.com/s/1RGOQ4UOwcEGEhWMZRyfDXA?pwd=kvq7) 提取码: kvq7
+
+[https://player.bilibili.com/player.html?bvid=BV1a44y1N79U&autoplay=0](https://player.bilibili.com/player.html?bvid=BV1a44y1N79U&autoplay=0)
+AI 仓库：使用 Isaac Sim 和 Isaac ROS 实现视觉导航
 
 **github 教程**
 
@@ -4987,23 +4994,17 @@ Genesis 项目应运而生，旨在应对这些挑战。我们的愿景是打造
 Genesis 设计为跨平台支持，包括 CPU、CUDA GPU 和非 CUDA GPU 后端设备。为了获得最佳性能，推荐在配有 CUDA 兼容 GPU 的 Linux 平台上使用。
 不同操作系统的功能支持如下：
 
-操作系统	GPU 设备	GPU 仿真	CPU 仿真	交互式查看器	无头渲染
+| 操作系统 | GPU 设备 | GPU 仿真 | CPU 仿真 | 交互式查看器 | 无头渲染 | 
+|------|------------|----------------|----------|----------|  
+| Linux | ✅ | ✅ | ✅ | ✅ |  
+|  | AMD | ✅ | ✅ | ✅ | ✅ | 
+|  | Intel | ✅ | ✅ | ✅ | ✅ | 
+| Windows | ✅ | ✅ | ❌ | ❌ |  
+|  | AMD | ✅ | ✅ | ❌ | ❌ | 
+|  | Intel | ✅ | ✅ | ❌ | ❌ | 
+| MacOS | Apple Silicon | ✅ | ✅ | ✅ | ✅ |
 
-Linux	Nvidia	✅	✅	✅	✅
-
-	AMD	✅	✅	✅	✅
-	
-	Intel	✅	✅	✅	✅
-	
-Windows	Nvidia	✅	✅	❌	❌
-
-	AMD	✅	✅	❌	❌
-	
-	Intel	✅	✅	❌	❌
-	
-MacOS	Apple Silicon	✅	✅	✅	✅
-
-安装步骤
+**安装步骤**
 1. 通过 PyPI 安装 Genesis：
 pip install genesis-world
 2. 安装 PyTorch，请根据官方说明进行安装。
@@ -5077,7 +5078,7 @@ ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 libstdc++.so.6
 ```
 这样，您就完成了 Genesis 的安装，接下来可以开始使用它进行仿真和开发了！
 
-***Genesis初探**
+**Genesis初探**
 
 Genesis 教程：基础示例
 在这个教程中，我们将通过一个简单的例子来加载一个单独的 Franta 机械臂，然后让它自由地掉落到地面上。这个例子将用来演示在 Genesis 中创建仿真实验的核心步骤和一些基本概念。
@@ -5444,10 +5445,14 @@ python demo.py
 
 
 
-FAQ 疑难解答
-- 执行cmake -S . -B build -D CMAKE_BUILD_TYPE=Release -D PYTHON_VERSIONS=3.9 -D
+**FAQ 疑难解答**
+- 执行
+```shell
+cmake -S . -B build -D CMAKE_BUILD_TYPE=Release -D PYTHON_VERSIONS=3.9 -D
+```
 
-LUISA_COMPUTE_DOWNLOAD_NVCOMP=ON时遇到Pybind错误，
+```shell LUISA_COMPUTE_DOWNLOAD_NVCOMP=ON```时遇到Pybind错误，
+```shell
 CMake Error at src/apps/CMakeLists.txt:12 (find_package):
 By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
 asked CMake to find a package configuration file provided by "pybind11",
@@ -5458,18 +5463,25 @@ of the following names:
 
     pybind11Config.cmake
     pybind11-config.cmake
-    可能是遗漏执行pip install -e ".[render]"导致。或者也可以直接安装pybind：pip install "pybind11[global]"。
-    
-- 执行cmake -S . -B build -D CMAKE_BUILD_TYPE=Release -D PYTHON_VERSIONS=3.9 -D
+```
 
-LUISA_COMPUTE_DOWNLOAD_NVCOMP=ON时遇到CUDA运行时编译错误，
+可能是遗漏执行pip install -e ".[render]"导致。或者也可以直接安装pybind：pip install "pybind11[global]"。
+    
+- 执行```shell cmake -S . -B build -D CMAKE_BUILD_TYPE=Release -D PYTHON_VERSIONS=3.9 -D```
+
+```shell LUISA_COMPUTE_DOWNLOAD_NVCOMP=ON```时遇到CUDA运行时编译错误，
+```shell
 /usr/bin/ld: CMakeFiles/luisa-cuda-nvrtc-standalone-compiler.dir/cuda_nvrtc_compiler.cpp.o: in function `main`:
 cuda_nvrtc_compiler.cpp:(.text.startup+0x173): undefined reference to `nvrtcGetOptiXIRSize`
 /usr/bin/ld: cuda_nvrtc_compiler.cpp:(.text.startup+0x197): undefined reference to `nvrtcGetOptiXIR`
+```
     需要正确安装“系统级”的CUDA工具包（cuda-toolkit）（官方安装指南）。首先检查CUDA工具包是否安装，
+```shell
 nvcc --version # 这应该与你从nvidia-smi获取的CUDA版本一致
 which nvcc # 确认你正在使用正确的CUDA工具包
+```
     如果nvcc命令没有给出正确的输出，请按照官方CUDA工具包安装指南进行操作。以下是安装CUDA工具包（以CUDA 12.4为例）的一些步骤。从这里下载安装程序。
+```shell
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
 sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
 wget https://developer.download.nvidia.com/compute/cuda/12.4.0/local_installers/cuda-repo-ubuntu2204-12-4-local_12.4.0-550.54.14-1_amd64.deb
@@ -5477,11 +5489,15 @@ sudo dpkg -i cuda-repo-ubuntu2204-12-4-local_12.4.0-550.54.14-1_amd64.deb
 sudo cp /var/cuda-repo-ubuntu2204-12-4-local/cuda-*-keyring.gpg /usr/share/keyrings/
 sudo apt-get update
 sudo apt-get -y install cuda-toolkit-12-4
-    设置二进制文件和运行时库路径：在~/.bashrc中添加以下内容。注意最好将CUDA路径添加到最后，因为/usr/local/cuda-12.4/bin目录中也可能存在其他版本的gcc和g++，而gcc/g++11是构建所必需的），
+```
+    设置二进制文件和运行时库路径：在```shell ~/.bashrc```中添加以下内容。注意最好将CUDA路径添加到最后，因为```shell /usr/local/cuda-12.4/bin```目录中也可能存在其他版本的gcc和g++，而gcc/g++11是构建所必需的），
+```shell
 PATH=${PATH:+${PATH}:}/usr/local/cuda-12.4/bin
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}/usr/local/cuda-12.4/lib64
-    最后重启终端或执行source ~/.bashrc。
+```
+    最后重启终端或执行```shell source ~/.bashrc```。
     另一种错误类型是，
+	```shell
 <your-env-path>/bin/ld: /lib/x86_64-linux-gnu/libc.so.6: undefined reference to `_dl_fatal_printf@GLIBC_PRIVATE`
 <your-env-path>/bin/ld: /lib/x86_64-linux-gnu/libc.so.6: undefined reference to `_dl_audit_symbind_alt@GLIBC_PRIVATE`
 <your-env-path>/genesis-test1/bin/ld: /lib/x86_64-linux-gnu/libc.so.6: undefined reference to `_dl_exception_create@GLIBC_PRIVATE`
@@ -5489,20 +5505,29 @@ LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}/usr/local/cuda-12.4/lib6
 <your-env-path>/bin/ld: /lib/x86_64-linux-gnu/libc.so.6: undefined reference to `__tunable_get_val@GLIBC_PRIVATE`
 <your-env-path>/bin/ld: /lib/x86_64-linux-gnu/libc.so.6: undefined reference to `_dl_audit_preinit@GLIBC_PRIVATE`
 <your-env-path>/bin/ld: /lib/x86_64-linux-gnu/libc.so.6: undefined reference to `_dl_find_dso_for_object@GLIBC_PRIVATE`
+```
     这可能是由于conda环境中的CUDA工具包导致的。请执行以下操作并安装系统级的CUDA，
+```shell
 which nvcc
 conda uninstall cuda-toolkit
+```
     或者，你可以将conda的库路径添加到运行时库路径中，
+```shell
 ls $CONDA_PREFIX/lib/libcudart.so # 你应该有这个文件
-
-#在你的~/.bashrc中添加
+```
+#在你的```shell ~/.bashrc```中添加
+```shell
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}/usr/local/cuda-12.4/lib64
+```
     最后，记得在完成上述修复后清理构建。
+```shell
 rm -r build
-    
-- 执行cmake -S . -B build -D CMAKE_BUILD_TYPE=Release -D PYTHON_VERSIONS=3.9 -D
+```
 
-LUISA_COMPUTE_DOWNLOAD_NVCOMP=ON时遇到编译器错误，
+- 执行```shell cmake -S . -B build -D CMAKE_BUILD_TYPE=Release -D PYTHON_VERSIONS=3.9 -D```
+
+```shell LUISA_COMPUTE_DOWNLOAD_NVCOMP=ON```时遇到编译器错误，
+```shell
 CMake Error at /snap/cmake/1435/share/cmake-3.31/Modules/CMakeDetermineCCompiler.cmake:49 (message):
 Could not find compiler set in environment variable CC:
 
@@ -5513,27 +5538,31 @@ CMakeLists.txt:21 (project)
 
 CMake Error: CMAKE_C_COMPILER not set, after EnableLanguage
 CMake Error: CMAKE_CXX_COMPILER not set, after EnableLanguage
+```
     可能是gcc和g++版本不正确导致。请仔细检查
     （i）gcc/g++版本是否为 11
     （ii）二进制文件是否指向正确的路径
     （iii）二进制文件路径的顺序，
+```shell
 gcc --version
 g++ --version
 which gcc
 which g++
 echo $PATH # 例如，/usr/local/cuda-12.4/bin/gcc（版本=10.5）不应该排在/usr/bin/gcc（版本=11）之前
-    
-- 运行examples/rendering/demo.py时出现导入错误，
+```
+- 运行```shell examples/rendering/demo.py```时出现导入错误，
+```shell
 [Genesis] [11:29:47] [ERROR] Failed to import LuisaRenderer. ImportError: /home/tsunw/miniconda3/envs/genesis-test1/bin/../lib/libstdc++.so.6: version `GLIBCXX_3.4.30` not found (required by /home/tsunw/workspace/Genesis/genesis/ext/LuisaRender/build/bin/liblc-core.so)
+```
     conda安装的libstdc++.so.6不支持3.4.30，需要将系统库中的libstdc++.so.6文件链接到conda中（参考）。
+```shell
 cd $CONDA_PREFIX/lib
 mv libstdc++.so.6 libstdc++.so.6.old
 ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 libstdc++.so.6
-  
+```
 **逆解和运动规划**
-🦾逆解和运动规划
 
-在本教程中，我们将通过几个示例来演示如何在Genesis中使用逆向运动学（IK）和运动规划，并执行一个简单的抓取任务。
+我们将通过几个示例来演示如何在Genesis中使用逆向运动学（IK）和运动规划，并执行一个简单的抓取任务。
   首先，我们创建一个场景，加载你喜欢的机器人臂和一个小方块，构建场景，然后设置控制增益：
 
 ```python
@@ -5800,14 +5829,23 @@ FPS日志记录： 默认情况下，Genesis记录器将在终端显示实时仿
 
 今日刷屏的Genesis有效信源整合 - 强化学徒的文章 - 知乎
 [https://zhuanlan.zhihu.com/p/13603265800](https://zhuanlan.zhihu.com/p/13603265800)
+
 完整Demo视频：[【太炸裂了 Genesis机器人物理引擎震撼发布-B站转载】](https://www.bilibili.com/video/BV12ykTY5EPr/)
+
 genesis中文文档[https://genesis-world.readthedocs.io/zh-cn](https://genesis-world.readthedocs.io/zh-cn)
+
 开源地址：[https://github.com/Genesis-Embodied-AI/Genesis](https://github.com/Genesis-Embodied-AI/Genesis)
+
 项目主页：[https://genesis-embodied-ai.github.io/](https://genesis-embodied-ai.github.io/)
+
 论文：暂时没有发布；
+
 三大会报道：[https://mp.weixin.qq.com/s/vx5owauc2aNUPf8LVeB8jw](https://mp.weixin.qq.com/s/vx5owauc2aNUPf8LVeB8jw)
+
 作者社媒主页【后续会有discord】：[https://x.com/zhou_xian_/status/1869511650782658846?s=46&t=e_20cB9LtY99fq_ngACPgA](https://x.com/zhou_xian_/status/1869511650782658846?s=46&t=e_20cB9LtY99fq_ngACPgA)
+
 石麻笔记：[Genesis 发布：全新机器人物理引擎——它会变革机器人仿真吗？](https://mp.weixin.qq.com/s/IEhpXMdotHOPwhLdZYKeAA)
+
 后空翻代码：[https://github.com/ziyanx02/Genesis-backflip](https://github.com/ziyanx02/Genesis-backflip)
 
 
@@ -5818,17 +5856,18 @@ genesis中文文档[https://genesis-world.readthedocs.io/zh-cn](https://genesis-
 
 由于Isaac Lab内基本集成了目前常用的绝大多数任务基准，以下以Isaac Lab集成的任务基准为例进行阐述。其他仿真器下任务名及设置可能稍有不同，但基准任务本身基本一致，在其他仿真器下可通过官方文档找到类似的对应任务基准。以下列表包含在 Isaac Lab 中可用的所有 RL 和 IL 任务实现。尽管我们尽量保持此列表最新，您仍可以通过运行以下命令获取最新的环境列表:
 
- Linux
+```shell
 ./isaaclab.sh -p scripts/environments/list_envs.py
+```
 
-单一智能体
-经典
+**单一智能体**
+**经典**
 基于 IsaacGymEnvs 实现的 MuJoCo 风格环境的经典环境。
 <img width="819" height="572" alt="image" src="https://github.com/user-attachments/assets/ceb5b2c9-edef-4a22-8e30-45b65840ca7b" />
 <img width="819" height="524" alt="image" src="https://github.com/user-attachments/assets/bf50f301-0c46-4502-ab4d-f1f23754a3b1" />
 
 
-操作臂
+**操作臂**
 基于固定机械臂操作任务的环境。
 
 对于许多这些任务，我们包括具有不同手臂动作空间的配置。例如，对于 lift-cube 环境:
@@ -5848,7 +5887,7 @@ Isaac-Lift-Cube-Franka-IK-Rel-v0: Franka机械臂相对IK控制
 <img width="875" height="338" alt="image" src="https://github.com/user-attachments/assets/075e7193-3e1b-4642-a419-b9e9a4589702" />
 
 
-富接触操控
+**富接触操控**
 基于富接触操控的环境，例如销钉插入、齿轮啮合和螺母螺栓紧固。
 
 这些任务共享相同的任务配置和控制选项。您可以通过指定任务名称在它们之间切换。例如:
@@ -5862,7 +5901,7 @@ Isaac-Factory-NutThread-Direct-v0: 用Franka机械臂进行螺母螺栓紧固
 <img width="875" height="743" alt="image" src="https://github.com/user-attachments/assets/c294b29c-f5b7-4b6c-8b89-02edd1e880e9" />
 
 
-自动装配
+**自动装配**
 基于100种不同装配任务的环境，每个任务都涉及将插头插入插座的操作。这些任务共享相同的配置框架，但通过零部件的几何形状和物理属性实现差异化。
 
 可通过指定对应的资产ID切换不同任务，可用资产ID包括:
@@ -5871,28 +5910,34 @@ Isaac-Factory-NutThread-Direct-v0: 用Franka机械臂进行螺母螺栓紧固
 
 我们同时提供拆卸与装配两种任务环境。
 
-注意
+**注意:**
 
 建议使用 CUDA 与 570 驱动程序运行 AutoMate 环境。如果在架构为 x86_64 的 Linux 上使用 Nvidia 驱动程序 570 运行，我们按照以下步骤安装 CUDA 12.8。这允许在 AutoMate 环境中使用 CUDA 计算奖励。如果您有不同的操作系统或架构，请参阅 CUDA installation page 获取其他说明。
 
+```shell
 wget https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda_12.8.0_570.86.10_linux.run
 sudo sh cuda_12.8.0_570.86.10_linux.run --toolkit
+```
 使用 conda 时，可以通过以下命令安装 CUDA 工具包:
 
+```shell
 conda install cudatoolkit
+```
 使用 580 驱动程序和 CUDA 13，我们目前无法启用 CUDA 来计算奖励。代码会自动回退到 CPU，导致性能略慢。
 
-Isaac-AutoMate-Disassembly-Direct-v0: 初始状态下插头已插入插座，底层控制器会将插头拔出并移至随机位置。这个过程完全由脚本控制，不涉及任何学习策略，因此不需要进行策略训练或评估。这些结果轨迹可作为逆向学习（即装配学习）的示范数据。运行指定任务的拆卸模式: python source/isaaclab_tasks/isaaclab_tasks/direct/automate/run_disassembly_w_id.py --assembly_id=ASSEMBLY_ID --disassembly_dir=DISASSEMBLY_DIR. 所有生成的轨迹存储在本地文件夹 DISASSEMBLY_DIR 中。
+
+Isaac-AutoMate-Disassembly-Direct-v0: 初始状态下插头已插入插座，底层控制器会将插头拔出并移至随机位置。这个过程完全由脚本控制，不涉及任何学习策略，因此不需要进行策略训练或评估。这些结果轨迹可作为逆向学习（即装配学习）的示范数据。运行指定任务的拆卸模式: ```shell python source/isaaclab_tasks/isaaclab_tasks/direct/automate/run_disassembly_w_id.py --assembly_id=ASSEMBLY_ID --disassembly_dir=DISASSEMBLY_DIR```. 所有生成的轨迹存储在本地文件夹 DISASSEMBLY_DIR 中。
 
 Isaac-AutoMate-Assembly-Direct-v0: 目标是将插头插入插座。你可以使用这个环境通过强化学习训练策略，或评估预训练模型。
 
-要训练装配策略，我们运行命令 python source/isaaclab_tasks/isaaclab_tasks/direct/automate/run_w_id.py --assembly_id=ASSEMBLY_ID --train 。我们可以通过可选参数自定义训练流程: 使用 --headless 以无界面模式运行（不打开GUI窗口）， --max_iterations=MAX_ITERATIONS 设置训练迭代次数， --num_envs=NUM_ENVS 设置训练时的并行环境数量， --seed=SEED 指定随机种子。训练过程中，策略检查点会自动保存在 logs/rl_games/Assembly/test 目录下。
+要训练装配策略，我们运行命令 ```shell python source/isaaclab_tasks/isaaclab_tasks/direct/automate/run_w_id.py --assembly_id=ASSEMBLY_ID --train ```。我们可以通过可选参数自定义训练流程: 使用 --headless 以无界面模式运行（不打开GUI窗口）， --max_iterations=MAX_ITERATIONS 设置训练迭代次数， --num_envs=NUM_ENVS 设置训练时的并行环境数量， --seed=SEED 指定随机种子。训练过程中，策略检查点会自动保存在 logs/rl_games/Assembly/test 目录下。
 
-要评估一个装配策略，我们运行命令 python source/isaaclab_tasks/isaaclab_tasks/direct/automate/run_w_id.py --assembly_id=ASSEMBLY_ID --checkpoint=CHECKPOINT --log_eval 。评估结果存储在 evaluation_{ASSEMBLY_ID}.h5 。
+要评估一个装配策略，我们运行命令 ```shell python source/isaaclab_tasks/isaaclab_tasks/direct/automate/run_w_id.py --assembly_id=ASSEMBLY_ID --checkpoint=CHECKPOINT --log_eval ```。评估结果存储在 evaluation_{ASSEMBLY_ID}.h5 。
 
 <img width="872" height="500" alt="image" src="https://github.com/user-attachments/assets/556970ff-dba3-4da1-84b5-bfba6989851f" />
 
-FORGE
+**FORGE**
+
 FORGE 环境通过以下方式扩展了 Factory 环境:
 
 力传感: 添加末端执行器所受力的观测值。
@@ -5913,8 +5958,9 @@ Isaac-Forge-NutThread-Direct-v0: 用Franka机械臂进行螺母螺栓紧固
 
 <img width="876" height="742" alt="image" src="https://github.com/user-attachments/assets/91ac4a06-863c-4756-b5f9-2cf45aa35fcc" />
 
-运动
-基于四足运动任务的环境
+**运动**
+**基于四足运动任务的环境**
+
 <img width="875" height="608" alt="image" src="https://github.com/user-attachments/assets/e0e30d43-52f5-485a-a133-785b6501409c" />
 <img width="877" height="561" alt="image" src="https://github.com/user-attachments/assets/8e994e60-c203-47bc-8351-7c6ef2ddbd50" />
 <img width="874" height="559" alt="image" src="https://github.com/user-attachments/assets/ff5eb580-dbd5-4066-aa83-0f7439bb0c58" />
@@ -5923,12 +5969,12 @@ Isaac-Forge-NutThread-Direct-v0: 用Franka机械臂进行螺母螺栓紧固
 <img width="875" height="560" alt="image" src="https://github.com/user-attachments/assets/67396204-eeb1-44a7-893c-5dd5b6790036" />
 <img width="879" height="376" alt="image" src="https://github.com/user-attachments/assets/eee9efc4-b6f4-484b-86a1-9960d167a29b" />
 
-导航
+**导航**
 <img width="878" height="232" alt="image" src="https://github.com/user-attachments/assets/b19c2bd9-9f94-43aa-9900-83ecf88c670a" />
 
 
-Others
-备注
+**Others**
+**备注**
 对抗运动先验 (AMP) 训练仅在 skrl 库中可用，因为它是当前集成的库中唯一一个开箱即用支持该功能的库（对于其他库，需要实现该算法和架构）。有关更多信息，请参见 skrl’s AMP Documentation 。可以通过向训练/播放脚本添加命令行输入 --algorithm AMP 来激活 AMP 算法。
 
 为了评估，脚本的命令行输入 --real-time 允许环境和智能体之间的交互循环在可能的情况下实时运行。
@@ -5936,10 +5982,10 @@ Others
 <img width="877" height="439" alt="image" src="https://github.com/user-attachments/assets/e4fa59d3-93ab-466f-aa07-221331aba4f9" />
 
 
-空间展示
+**空间展示**
 cartpole_showcase 文件夹包含示例任务（基于 Cartpole 和 Cartpole-Camera Direct 任务），用于定义/使用 Isaac Lab 支持的各种 Gymnasium 观测空间和动作空间。
 
-备注
+**备注**
 
 目前，仅 Isaac Lab 的 Direct 工作流支持定义除 Box 之外的观测空间和动作空间。请参阅 Direct 工作流的 observation_space / action_space 文档以获取更多详细信息。
 
@@ -5947,23 +5993,23 @@ cartpole_showcase 文件夹包含示例任务（基于 Cartpole 和 Cartpole-Cam
 
 <img width="783" height="600" alt="image" src="https://github.com/user-attachments/assets/db025a0a-627a-4c5a-ab24-890a12259780" />
 
-多智能体
-备注
+**多智能体**
+**备注**
 
 真正的多智能体训练仅在 skrl 库中可用，更多信息请参见 多智能体文档 。它支持 IPPO 和 MAPPO 算法，可以通过在训练/回放脚本中添加命令行输入 --algorithm IPPO 或 --algorithm MAPPO 来激活。如果这些环境与其他库一起运行或没有 IPPO 或 MAPPO 标志，它们将在后台转换为单智能体环境。
 
-经典
+**经典**
 <img width="874" height="232" alt="image" src="https://github.com/user-attachments/assets/b61a141e-2aa4-4c5d-bd75-547c23716ac0" />
 
 
-操作臂
+**操作臂**
 基于固定机械臂操作任务的环境。
 
 <img width="874" height="233" alt="image" src="https://github.com/user-attachments/assets/34f08534-6e5e-4070-8190-610f4f63fc01" />
 
 
 
-综合环境列表
+**综合环境列表**
 对于在 推理任务名称 下列出不同任务名称的环境，请在运行 play.py 或任何推理工作流时使用提供的推理任务名称。这些任务提供了更适合推理的配置，包括从已训练好的检查点读取数据，并禁用训练时使用的运行时扰动。
 
 <img width="877" height="729" alt="image" src="https://github.com/user-attachments/assets/08574079-d3da-4c6f-8cb7-60219aa02639" />
@@ -5985,7 +6031,7 @@ cartpole_showcase 文件夹包含示例任务（基于 Cartpole 和 Cartpole-Cam
 6.3.1.1 URDF文件数据集
 转自：知乎huyoust
 
-里面收集的资料也比较多，都分类整理了，有机械臂，双足，双臂，飞行器，执行器，仿人，四足，轮式等。实际上github上有很多awesome ***类型的项目，这些作者都有着极大的专注与热情，能省去自己找资料的麻烦，推荐感兴趣的去给他们点个免费的star。
+里面收集的资料也比较多，都分类整理了，有机械臂，双足，双臂，飞行器，执行器，仿人，四足，轮式等。实际上github上有很多awesome类型的项目，这些作者都有着极大的专注与热情，能省去自己找资料的麻烦，推荐感兴趣的去给他们点个免费的star。
 
 <img width="1138" height="991" alt="image" src="https://github.com/user-attachments/assets/99ae23a8-af87-4a00-a3f0-cade61d33391" />
 <img width="1260" height="1153" alt="image" src="https://github.com/user-attachments/assets/83ef113a-fc4e-42f9-b672-19e50b9e84d6" />
@@ -6084,14 +6130,19 @@ Using Xacro to Clean Up a URDF File
 [https://github.com/robot-descriptions/awesome-robot-descriptions
 github.com/robot-descriptions/awesome-robot-descriptions](https://github.com/robot-descriptions/awesome-robot-descriptions
 github.com/robot-descriptions/awesome-robot-descriptions)
+
 [GitHub - robot-descriptions/awesome-robot-descriptions: A curated list of awesome robot descriptions (URDF, MJCF)](https://github.com/robot-descriptions/awesome-robot-descriptions)
+
 [https://github.com/robot-descriptions/awesome-robot-descriptions
 github.com/robot-descriptions/awesome-robot-descriptions
 ](https://github.com/robot-descriptions/awesome-robot-descriptions
 github.com/robot-descriptions/awesome-robot-descriptions
 )
-6.3.2 相机布局
-配置仿真上下文
+
+#### 6.3.2 相机布局
+
+**配置仿真上下文**
+
 当从独立脚本启动仿真器时，用户可以完全控制播放、暂停和步进仿真器。所有这些操作都通过 仿真上下文 处理。它负责各种时间轴事件，并为仿真器配置 物理场景 。
 
 在 Isaac Lab 中 , sim.SimulationContext 类继承了 Isaac Sim 的 isaacsim.core.api.simulation_context.SimulationContext ，以允许通过 Python 的 dataclass 对象配置仿真器，并处理仿真步进的某些复杂性。
@@ -6110,15 +6161,17 @@ github.com/robot-descriptions/awesome-robot-descriptions
 
 运行仿真循环: 使仿真器进行步进，并从仿真器中设置和获取数据
 
-6.3.3 光照与碰撞
-生成地面平面
+#### 6.3.3 光照与碰撞
+**生成地面平面**
+
 GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小等属性可修改。
 ```python
     # Ground-plane
     cfg_ground = sim_utils.GroundPlaneCfg()
     cfg_ground.func("/World/defaultGroundPlane", cfg_ground)
 ```
-生成灯光
+
+**生成灯光**
 可以将 不同类型的灯光基本体 生成到场景中。这些包括远光灯、球形灯、圆盘灯和圆柱灯。在本教程中，我们生成一个远光灯，这是一种远离场景无限远的灯，只朝一个方向发光。
 ```python
     # spawn distant light
@@ -6182,8 +6235,8 @@ GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小�
 ```
 上面的表被添加为场景的一个引用。简单来说，这意味着表实际上并没有添加到场景中，而是添加了一个指向表资产的 指针 。这允许我们修改表资产，并使更改以非破坏性的方式反映在场景中。例如，我们可以更改表的材质，而不实际修改表资产的底层文件。只有更改存储在USD场景中。
 
-6.4 日志与回放：录制、重放、评测
-查看日志
+### 6.4 日志与回放：录制、重放、评测
+**查看日志**
 在单独的终端中，您可以通过执行以下命令监视训练进度:
 ```python
 # execute from the root directory of the repository
@@ -6198,7 +6251,7 @@ GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小�
 上述命令将从 logs/sb3/Isaac-Cartpole-v0 目录加载最新的检查点。您也可以通过传递 --checkpoint 标志指定特定的检查点。
 
 
-6.5 **样板：Isaac Lab 最小上手（可复制运行）**
+#### 6.5 **样板：Isaac Lab 最小上手（可复制运行）**
 
 train.py
 
