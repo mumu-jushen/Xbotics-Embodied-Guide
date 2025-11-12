@@ -5924,13 +5924,16 @@ genesis中文文档[https://genesis-world.readthedocs.io/zh-cn](https://genesis-
 ```
 
 **单一智能体**
+
 **经典**
+
 基于 IsaacGymEnvs 实现的 MuJoCo 风格环境的经典环境。
 <img width="819" height="572" alt="image" src="https://github.com/user-attachments/assets/ceb5b2c9-edef-4a22-8e30-45b65840ca7b" />
 <img width="819" height="524" alt="image" src="https://github.com/user-attachments/assets/bf50f301-0c46-4502-ab4d-f1f23754a3b1" />
 
 
 **操作臂**
+
 基于固定机械臂操作任务的环境。
 
 对于许多这些任务，我们包括具有不同手臂动作空间的配置。例如，对于 lift-cube 环境:
@@ -5951,6 +5954,7 @@ Isaac-Lift-Cube-Franka-IK-Rel-v0: Franka机械臂相对IK控制
 
 
 **富接触操控**
+
 基于富接触操控的环境，例如销钉插入、齿轮啮合和螺母螺栓紧固。
 
 这些任务共享相同的任务配置和控制选项。您可以通过指定任务名称在它们之间切换。例如:
@@ -5965,6 +5969,7 @@ Isaac-Factory-NutThread-Direct-v0: 用Franka机械臂进行螺母螺栓紧固
 
 
 **自动装配**
+
 基于100种不同装配任务的环境，每个任务都涉及将插头插入插座的操作。这些任务共享相同的配置框架，但通过零部件的几何形状和物理属性实现差异化。
 
 可通过指定对应的资产ID切换不同任务，可用资产ID包括:
@@ -6033,12 +6038,13 @@ Isaac-Forge-NutThread-Direct-v0: 用Franka机械臂进行螺母螺栓紧固
 <img width="879" height="376" alt="image" src="https://github.com/user-attachments/assets/eee9efc4-b6f4-484b-86a1-9960d167a29b" />
 
 **导航**
+
 <img width="878" height="232" alt="image" src="https://github.com/user-attachments/assets/b19c2bd9-9f94-43aa-9900-83ecf88c670a" />
 
 
 **Others**
-**备注**
-对抗运动先验 (AMP) 训练仅在 skrl 库中可用，因为它是当前集成的库中唯一一个开箱即用支持该功能的库（对于其他库，需要实现该算法和架构）。有关更多信息，请参见 skrl’s AMP Documentation 。可以通过向训练/播放脚本添加命令行输入 --algorithm AMP 来激活 AMP 算法。
+
+备注：对抗运动先验 (AMP) 训练仅在 skrl 库中可用，因为它是当前集成的库中唯一一个开箱即用支持该功能的库（对于其他库，需要实现该算法和架构）。有关更多信息，请参见 skrl’s AMP Documentation 。可以通过向训练/播放脚本添加命令行输入 --algorithm AMP 来激活 AMP 算法。
 
 为了评估，脚本的命令行输入 --real-time 允许环境和智能体之间的交互循环在可能的情况下实时运行。
 
@@ -6046,26 +6052,25 @@ Isaac-Forge-NutThread-Direct-v0: 用Franka机械臂进行螺母螺栓紧固
 
 
 **空间展示**
+
 cartpole_showcase 文件夹包含示例任务（基于 Cartpole 和 Cartpole-Camera Direct 任务），用于定义/使用 Isaac Lab 支持的各种 Gymnasium 观测空间和动作空间。
 
-**备注**
-
-目前，仅 Isaac Lab 的 Direct 工作流支持定义除 Box 之外的观测空间和动作空间。请参阅 Direct 工作流的 observation_space / action_space 文档以获取更多详细信息。
+备注：目前，仅 Isaac Lab 的 Direct 工作流支持定义除 Box 之外的观测空间和动作空间。请参阅 Direct 工作流的 observation_space / action_space 文档以获取更多详细信息。
 
 下表总结了 Cartpole 和 Cartpole-Camera 任务中展示的不同观测空间与动作空间的组合。在训练和评估的任务名称中，用 <OBSERVATION> 和 <ACTION> 替换相应的观测空间和动作空间。
 
 <img width="783" height="600" alt="image" src="https://github.com/user-attachments/assets/db025a0a-627a-4c5a-ab24-890a12259780" />
 
 **多智能体**
-**备注**
 
-真正的多智能体训练仅在 skrl 库中可用，更多信息请参见 多智能体文档 。它支持 IPPO 和 MAPPO 算法，可以通过在训练/回放脚本中添加命令行输入 --algorithm IPPO 或 --algorithm MAPPO 来激活。如果这些环境与其他库一起运行或没有 IPPO 或 MAPPO 标志，它们将在后台转换为单智能体环境。
+备注：真正的多智能体训练仅在 skrl 库中可用，更多信息请参见 多智能体文档 。它支持 IPPO 和 MAPPO 算法，可以通过在训练/回放脚本中添加命令行输入 --algorithm IPPO 或 --algorithm MAPPO 来激活。如果这些环境与其他库一起运行或没有 IPPO 或 MAPPO 标志，它们将在后台转换为单智能体环境。
 
 **经典**
 <img width="874" height="232" alt="image" src="https://github.com/user-attachments/assets/b61a141e-2aa4-4c5d-bd75-547c23716ac0" />
 
 
 **操作臂**
+
 基于固定机械臂操作任务的环境。
 
 <img width="874" height="233" alt="image" src="https://github.com/user-attachments/assets/34f08534-6e5e-4070-8190-610f4f63fc01" />
@@ -6073,6 +6078,7 @@ cartpole_showcase 文件夹包含示例任务（基于 Cartpole 和 Cartpole-Cam
 
 
 **综合环境列表**
+
 对于在 推理任务名称 下列出不同任务名称的环境，请在运行 play.py 或任何推理工作流时使用提供的推理任务名称。这些任务提供了更适合推理的配置，包括从已训练好的检查点读取数据，并禁用训练时使用的运行时扰动。
 
 <img width="877" height="729" alt="image" src="https://github.com/user-attachments/assets/08574079-d3da-4c6f-8cb7-60219aa02639" />
@@ -6089,9 +6095,10 @@ cartpole_showcase 文件夹包含示例任务（基于 Cartpole 和 Cartpole-Cam
 
 
 
-6.3 资产与场景：USD/URDF 导入、相机布局、光照与碰撞
-6.3.1 USD/URDF 导入
-6.3.1.1 URDF文件数据集
+### 6.3 资产与场景：USD/URDF 导入、相机布局、光照与碰撞
+#### 6.3.1 USD/URDF 导入
+##### 6.3.1.1 URDF文件数据集
+
 转自：知乎huyoust
 
 里面收集的资料也比较多，都分类整理了，有机械臂，双足，双臂，飞行器，执行器，仿人，四足，轮式等。实际上github上有很多awesome类型的项目，这些作者都有着极大的专注与热情，能省去自己找资料的麻烦，推荐感兴趣的去给他们点个免费的star。
@@ -6107,14 +6114,16 @@ cartpole_showcase 文件夹包含示例任务（基于 Cartpole 和 Cartpole-Cam
 github.com/Daniella1/urdf_files_dataset](https://github.com/Daniella1/urdf_files_dataset)
 本来以为这也只是一个awesome xxx这样的资源收集型Git仓库，但是在README文件中看到，这个仓库还是一篇论文中的公开数据库：Understanding URDF: A Dataset and Analysis。点进去看一下全文，发现作者中居然有Peter Corke大佬，因此特意整理记录一下。
 
-（1）不同机器人仿真软件/工具
+**（1）不同机器人仿真软件/工具**
+
 机器人仿真软件/工具很多，通产每个仿真软件中的机器人模型都有自己原生的文件格式，下面表格所示为几种不同仿真软件原生模型的文件格式以及它们对URDF文件描述的机器人模型的支持性。可以看到，绝大部分的仿真软件都是支持导入URDF格式描述的机器人模型的。
 
 <img width="775" height="459" alt="image" src="https://github.com/user-attachments/assets/def5a6a8-281a-49d1-a1a9-7097d1be6abf" />
 
 不同机器人仿真工具对URDF文件的支持
 
-（2）为什么是URDF格式
+**（2）为什么是URDF格式**
+
 URDF，全称是Unified Robot Description Format，统一机器人描述格式。URDF文件格式用于描述机器人最早是由机器人操作系统（ROS）的开发人员在2009年引入，是一种描述机器人的运动学、动力学和几何形状的通用格式文件，独立于软件程序，方便不同的软件工具以及开发人员共享机器人数据模型。URDF文件重要的一点是其可读性，因为它是XML类型的文本文件。URDF文件中可以描述机器人的运动学结构、动力学参数、视觉外观（通过引用其它文件）和几何碰撞边界（通过引用其它文件）。
 
 关于URDF的更对细节可以参考：
@@ -6123,7 +6132,8 @@ URDF，全称是Unified Robot Description Format，统一机器人描述格式�
 
 [urdf/Tutorials - ROS Wiki](https://wiki.ros.org/urdf/Tutorials)
 
-（3）URDF文件解析
+**（3）URDF文件解析**
+
 模型（model）
 创建一个URDF文件的最小要求是机器人的名称和一个连杆。如下所示的URDF文件示例，它表示了一个2自由度的平面连杆机构，外观使用简单的几何形状：方块和圆柱，这个示例文件中有3个连杆和2个关节：
 
@@ -6133,7 +6143,8 @@ URDF，全称是Unified Robot Description Format，统一机器人描述格式�
 
 可以看到URDF文件中有一些关键的元素：
 
-连杆（link）
+**连杆（link）**
+
 连杆是可以使用关节进行连接的刚体，连杆有惯量（inertial）、视觉（visual）和碰撞（collision）等属性。惯性特性描述了连杆的质量、质心位置以及惯性矩。可视化特性和碰撞特性稍后再说。URDF中连杆只能是刚体，而不能是可形变的物体（在这一定程度上限制了URDF的应用范围，像涉及柔性体的机器人就不能用URDF文件直接表示）。
 
 <img width="1505" height="698" alt="image" src="https://github.com/user-attachments/assets/a2f666ad-4683-4e26-aee4-08e9c823baeb" />
@@ -6142,7 +6153,8 @@ URDF，全称是Unified Robot Description Format，统一机器人描述格式�
 
 前面的示例模型中，3个连杆的名称分别为“base link”、“link 1”和“link 2”。我们查看“基本链接”来说明如何指定链接，参见第3-10行的清单1。“base link”表示机器人的固定底座，其中它的视觉属性由一个原点和一个由一个方块组成的几何体来定义，方块的大小由其三个边的长度指定。一个连杆唯一的必需属性的是它的名称，在一个URDF文件中，连杆名称必须是唯一的，不同连杆的名称必须不同。
 
-关节（joint）
+**关节（joint）**
+
 关节用于连接两个连杆，一个父连杆和一个子连杆。父连杆是更靠近基座的连杆，子连杆是更靠近末端工具的连杆。关节的主要参数是关节类型（运动学）、动力学参数，以及活动范围。关节类型包括：
 
 旋转关节（revolute）：特指关节运动范围有明确的上限和下限的转动关节。
@@ -6155,7 +6167,7 @@ URDF，全称是Unified Robot Description Format，统一机器人描述格式�
 
 <img width="887" height="798" alt="image" src="https://github.com/user-attachments/assets/4bdb9c40-4aac-452b-8b36-6e5dd57250c1" />
 
-关节属性
+**关节属性**
 
 前面的示例模型中，关节的名称是“joint 1”和“joint 2”。关节类型是连续关节，这意味着它们是没有运动限制的旋转关节。“axis”属性指定关节轴的方向，在本例中，关节轴沿着Y轴。关节的必需属性是它的父连杆和子连杆的名称、关节类型和关节名称。
 
@@ -6166,12 +6178,14 @@ URDF，全称是Unified Robot Description Format，统一机器人描述格式�
 
 在URDF的一些应用中，碰撞检测是必需的，而在其他应用中，URDF模型仅用于可视化目的。根据应用程序的不同，URDF Bundle中可以包含不同类型的网格对象。例如，通常同时使用STL和COLLADA网格，因为STL网格不包含颜色与纹理，可以减少计算和渲染时间，同时STL可以进行凸包运算简化形状，因此常用于表示连杆的碰撞几何形状（碰撞检测通常需要大量运算，但是不需要关注结构细节，例如螺丝、螺帽、细孔这些），而COLLADA网格由于可以设置颜色、纹理等属性，因此通常作为连杆的可视化对象，提供高质量的可视化效果。
 
-URDF文件包（URDF Bundle/package）
+**URDF文件包（URDF Bundle/package）**
+
 一个URDF机器人模型通常包含描述机器人拓扑结构的URDF文件以及描述机器人物理外观网格文件组成。URDF文件本身（具有.urdf文件扩展名）和URDF文件中所引用的网格对象（作为link的属性）所组成的文件集，通常称为URDF包。如下所示的URDF文件包，包含了名为myrobot.urdf的URDF文件，以及mesh文件夹中网格对象。URDF文件是指使用相对路径生成的不同链接的几何网格文件。
 
 <img width="753" height="249" alt="image" src="https://github.com/user-attachments/assets/123e8480-fed5-430c-bdc7-8be4b0d6f6e7" />
 
-Xacro文件
+**Xacro文件**
+
 从前面可以看到，URDF文件适合定义静态的、完整的机器人模型，但对于复杂的机器人，URDF 可能会显得冗长且难以维护。Xacro是一种基于 XML 的宏扩展语言，主要用于简化和生成 URDF。Xacro 允许使用宏（macros）、变量、数学运算和参数化的方式来定义机器人模型，以提高可重用性和可读性。例如：
 
 减少重复代码：可以定义一个通用的部件并多次使用
@@ -6184,7 +6198,8 @@ rosrun xacro xacro my_robot.xacro > my_robot.urdf
 
 Using Xacro to Clean Up a URDF File
 
-（4）URDF数据库
+**（4）URDF数据库**
+
 对于大多数工业机械臂，由于其结构参数与特征都是固定的，因此在使用不同的软件工具进行算法仿真的时候，除非是初期的学习，通常都没必要自己再手动建模一遍，都是找现成的URDF文件，因为绝大多数机器人仿真软件都支持URDF格式文件的导入。前面提到的Understanding URDF: A Dataset and Analysis这篇文章中，作者规范地整理了超过300个不同来源的公开的URDF模型。
 <img width="781" height="263" alt="image" src="https://github.com/user-attachments/assets/e560d938-e36f-4922-9804-5f791ba1ca70" />
 <img width="648" height="828" alt="image" src="https://github.com/user-attachments/assets/db6329a8-2554-4523-8274-a7205ad25914" />
@@ -6225,6 +6240,7 @@ github.com/robot-descriptions/awesome-robot-descriptions
 运行仿真循环: 使仿真器进行步进，并从仿真器中设置和获取数据
 
 #### 6.3.3 光照与碰撞
+
 **生成地面平面**
 
 GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小等属性可修改。
@@ -6235,6 +6251,7 @@ GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小�
 ```
 
 **生成灯光**
+
 可以将 不同类型的灯光基本体 生成到场景中。这些包括远光灯、球形灯、圆盘灯和圆柱灯。在本教程中，我们生成一个远光灯，这是一种远离场景无限远的灯，只朝一个方向发光。
 ```python
     # spawn distant light
@@ -6244,7 +6261,8 @@ GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小�
     )
     cfg_light_distant.func("/World/lightDistant", cfg_light_distant, translation=(1, 0, 10))
 ```
-生成基本形状
+**生成基本形状**
+
 在生成基本形状之前，我们介绍了一个变换基本体或Xform的概念。变换基本体是一个仅包含变换属性的基本体。它用于将其他基本体分组，并作为一个组对其进行变换。在这里，我们创建一个Xform基本体，将所有的基本形状分组在其中。
 ```python
     # create a new xform prim for all objects to be spawned under
@@ -6300,6 +6318,7 @@ GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小�
 
 ### 6.4 日志与回放：录制、重放、评测
 **查看日志**
+
 在单独的终端中，您可以通过执行以下命令监视训练进度:
 ```python
 # execute from the root directory of the repository
@@ -6316,7 +6335,7 @@ GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小�
 
 #### 6.5 **样板：Isaac Lab 最小上手（可复制运行）**
 
-train.py
+**train.py**
 
 ```python
 # Copyright (c) 2022-2025, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
@@ -6528,7 +6547,8 @@ if __name__ == "__main__":
     simulation_app.close()
 ```
 
-play.py
+**play.py**
+
 ```python
 # Copyright (c) 2022-2025, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
 # All rights reserved.
@@ -6726,7 +6746,8 @@ if __name__ == "__main__":
     simulation_app.close()
 ```
 
-cli_args.py
+**cli_args.py**
+
 ```python
 # Copyright (c) 2022-2025, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
 # All rights reserved.
@@ -6821,7 +6842,7 @@ def update_rsl_rl_cfg(agent_cfg: RslRlOnPolicyRunnerCfg, args_cli: argparse.Name
     return agent_cfg
 ```
 
-Isaaclab.sh
+**Isaaclab.sh**
 
 ```python
 #!/usr/bin/env bash
