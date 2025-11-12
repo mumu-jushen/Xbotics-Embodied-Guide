@@ -548,10 +548,7 @@
 - **物体坐标系 {O}**：待操作物体
 
 齐次变换矩阵统一旋转R和平移P：
-```
-T = [R_{3×3}  P_{3×1}]
-    [0_{1×3}     1   ]
-```
+见【代码3-1】(详见 files/formulas/第三节/第三章-代码.md)
 串联机械臂从基座到末端：$T_0^n = T_0^1 \cdot T_1^2 \cdots T_{n-1}^n$
 
 **正逆运动学**
@@ -582,32 +579,12 @@ T = [R_{3×3}  P_{3×1}]
 **雅可比矩阵**
 
 建立关节速度$\dot{q}$和末端速度$v$的桥梁：
-```
-v = J(q) · q̇  （速度正运动学）
-τ = J^T · F  （静力学关系）
-```
-当$\det(J)=0$时处于奇异位形，失去某自由度。
+见【代码3-2】(详见 files/formulas/第三节/第三章-代码.md)
+
 
 **MoveIt框架架构**
 
-```
-用户接口层
-├── MoveIt Commander（Python/C++ API）
-├── Rviz Plugin（可视化拖动）
-└── Setup Assistant（配置向导）
-
-核心规划层
-├── Move Group（中央协调）
-├── Planning Scene（环境模型）
-├── Planning Pipeline
-│   ├── OMPL（RRT/PRM采样）
-│   ├── CHOMP（轨迹优化）
-│   └── Pilz（工业轨迹）
-└── Kinematics Solver（KDL/IKFast）
-
-执行控制层
-└── Trajectory Execution → Controllers
-```
+见【代码3-3】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 实践要点
 
@@ -631,19 +608,19 @@ v = J(q) · q̇  （速度正运动学）
 
 **第一层理解：纯黑盒**
 
-![输入输出黑盒](./files/images/第三节/2-input-output.png)
+见【图3-1】(详见 files/formulas/第三节/第三章-图片.md)
 
 就这么简单，法语进去，英语出来。别管里面咋实现的，反正它能工作。这就是2017年Google发表《Attention Is All You Need》时震撼世界的原因——这玩意儿把机器翻译的质量提升到了前所未有的高度。
 
 **第二层理解：打开盖子看大结构**
 
-![编码器解码器结构](./files/images/第三节/2-encoder-decoder.png)
+见【图3-2】(详见 files/formulas/第三节/第三章-图片.md)
 
 掀开盖子，里面是编码器（Encoder）和解码器（Decoder）两大块。编码器负责理解输入，解码器负责生成输出。原论文各用6层，但这不是死的——BERT用12层，GPT-3更夸张用了96层！
 
 **第三层理解：单层内部到底干啥**
 
-![单层编码器结构](./files/images/第三节/2-encoder.png)
+见【图3-3】(详见 files/formulas/第三节/第三章-图片.md)
 
 每一层编码器就干两件事：
 1. **Self-Attention**：让每个词都能"看到"整个句子的信息
@@ -651,7 +628,7 @@ v = J(q) · q̇  （速度正运动学）
 
 这两步都配了"跳线"（残差连接）和"归一化"（Layer Norm），保证信号稳定传递。
 
-![Transformer整体架构](./files/images/第三节/transformer%20structure.png)
+见【图3-4】(详见 files/formulas/第三节/第三章-图片.md)
 
 #### Self-Attention：核心中的核心
 
@@ -663,7 +640,7 @@ Self-Attention的革命性在于：**让序列中任意两个位置都能直接"
 
 **Query-Key-Value机制**
 
-![QKV机制](./files/images/第三节/2-qkv.png)
+见【图3-5】(详见 files/formulas/第三节/第三章-图片.md)
 
 这个机制特别像在图书馆找书：
 - **Query（查询）**：你想找什么书（"我需要关于机器学习的资料"）
@@ -671,73 +648,23 @@ Self-Attention的革命性在于：**让序列中任意两个位置都能直接"
 - **Value（值）**：书的实际内容
 
 数学上就是：
-```python
-# 假设输入序列 X 形状为 [batch, seq_len, d_model]
-Q = X @ W_Q  # 生成查询
-K = X @ W_K  # 生成键
-V = X @ W_V  # 生成值
-
-# 计算注意力分数
-scores = Q @ K.T / sqrt(d_k)  # 为啥除以根号d？防止梯度消失
-attention_weights = softmax(scores)
-output = attention_weights @ V
-```
+见【代码3-4】(详见 files/formulas/第三节/第三章-代码.md)
 
 为什么要除以$\sqrt{d_k}$？苏剑林在[《浅谈Transformer的初始化、参数化与标准化》](https://zhuanlan.zhihu.com/p/400925524)里讲得特别清楚——点积的方差会随维度增长，不除的话softmax会饱和。
 
 **注意力可视化**
 
-![词注意力可视化](./files/images/第三节/2-attention-word.png)
+见【图3-6】(详见 files/formulas/第三节/第三章-图片.md)
 
 这图展示了模型在翻译时的注意力分布。比如翻译"The animal didn't cross the street because it was too tired"时，模型需要判断"it"指代什么。通过注意力权重可视化，我们能看到模型确实学会了正确的指代关系。
 
 #### 多头注意力：团队协作
 
-![多头注意力](./files/images/第三节/2-multi-head.png)
+见【图3-7】(详见 files/formulas/第三节/第三章-图片.md)
 
 单个注意力头就像一个专家，多头注意力就是专家团队。假设d_model=512，用8个头，每个头负责64维：
 
-```python
-class MultiHeadAttention(nn.Module):
-    def __init__(self, d_model=512, n_heads=8):
-        super().__init__()
-        self.d_k = d_model // n_heads  # 64
-        self.n_heads = n_heads
-
-        # 为所有头一起计算QKV
-        self.W_Q = nn.Linear(d_model, d_model)
-        self.W_K = nn.Linear(d_model, d_model)
-        self.W_V = nn.Linear(d_model, d_model)
-        self.W_O = nn.Linear(d_model, d_model)
-
-    def forward(self, x, mask=None):
-        batch_size, seq_len, _ = x.shape
-
-        # 1. 计算QKV并reshape成多头
-        Q = self.W_Q(x).view(batch_size, seq_len, self.n_heads, self.d_k)
-        K = self.W_K(x).view(batch_size, seq_len, self.n_heads, self.d_k)
-        V = self.W_V(x).view(batch_size, seq_len, self.n_heads, self.d_k)
-
-        # 2. 转置便于并行计算: [batch, n_heads, seq_len, d_k]
-        Q = Q.transpose(1, 2)
-        K = K.transpose(1, 2)
-        V = V.transpose(1, 2)
-
-        # 3. 计算注意力
-        scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(self.d_k)
-
-        if mask is not None:
-            scores.masked_fill_(mask == 0, -1e9)
-
-        attention = F.softmax(scores, dim=-1)
-        context = torch.matmul(attention, V)
-
-        # 4. 合并多头
-        context = context.transpose(1, 2).contiguous()
-        context = context.view(batch_size, seq_len, d_model)
-
-        return self.W_O(context)
-```
+见【代码3-5】(详见 files/formulas/第三节/第三章-代码.md)
 
 不同的头会学到不同类型的关系：
 - **头1**：可能专注于局部语法（相邻词关系）
@@ -747,59 +674,25 @@ class MultiHeadAttention(nn.Module):
 
 #### 位置编码：告诉模型词序
 
-![位置编码](./files/images/第三节/2-position.png)
+见【图3-8】(详见 files/formulas/第三节/第三章-图片.md)
 
 Self-Attention有个问题——它不知道词的顺序！所以需要位置编码：
 
-![位置编码可视化](./files/images/第三节/2-2-pos-embedding.png)
+见【图3-9】(详见 files/formulas/第三节/第三章-图片.md)
+见【代码3-6】(详见 files/formulas/第三节/第三章-代码.md)
 
-```python
-class PositionalEncoding(nn.Module):
-    def __init__(self, d_model, max_len=5000):
-        super().__init__()
-        pe = torch.zeros(max_len, d_model)
-        position = torch.arange(0, max_len).unsqueeze(1).float()
-
-        # 创建频率项
-        div_term = torch.exp(torch.arange(0, d_model, 2).float() *
-                           -(math.log(10000.0) / d_model))
-
-        # 偶数维度用sin
-        pe[:, 0::2] = torch.sin(position * div_term)
-        # 奇数维度用cos
-        pe[:, 1::2] = torch.cos(position * div_term)
-
-        # 注册为buffer，不参与训练
-        self.register_buffer('pe', pe.unsqueeze(0))
-
-    def forward(self, x):
-        # x: [batch, seq_len, d_model]
-        return x + self.pe[:, :x.size(1)]
-```
 
 为啥用sin/cos？因为它们有个神奇的性质：
-```
-PE(pos+k) 可以表示为 PE(pos) 和 PE(k) 的线性组合
-```
-这让模型能学到相对位置关系！
+见【代码3-7】(详见 files/formulas/第三节/第三章-代码.md)
+
 
 #### 残差连接与Layer Norm
 
-![残差连接](./files/images/第三节/2-resnet.png)
+见【图3-10】(详见 files/formulas/第三节/第三章-图片.md)
 
 每个子层都用了残差连接（借鉴ResNet）+ Layer Normalization：
 
-```python
-class ResidualConnection(nn.Module):
-    def __init__(self, d_model, dropout=0.1):
-        super().__init__()
-        self.norm = nn.LayerNorm(d_model)
-        self.dropout = nn.Dropout(dropout)
-
-    def forward(self, x, sublayer):
-        # Post-LN: x + dropout(sublayer(norm(x)))
-        return x + self.dropout(sublayer(self.norm(x)))
-```
+见【代码3-8】(详见 files/formulas/第三节/第三章-代码.md)
 
 为啥要这么做？
 - **残差连接**：防止梯度消失，让深层网络训练更稳定
@@ -807,43 +700,11 @@ class ResidualConnection(nn.Module):
 
 #### Encoder完整实现
 
-![编码器流程](./files/images/第三节/2-x-encoder.png)
+见【图3-11】(详见 files/formulas/第三节/第三章-图片.md)
 
 把所有组件拼起来：
 
-```python
-class EncoderLayer(nn.Module):
-    def __init__(self, d_model=512, n_heads=8, d_ff=2048, dropout=0.1):
-        super().__init__()
-        self.attention = MultiHeadAttention(d_model, n_heads)
-        self.feed_forward = nn.Sequential(
-            nn.Linear(d_model, d_ff),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(d_ff, d_model)
-        )
-        self.residual1 = ResidualConnection(d_model, dropout)
-        self.residual2 = ResidualConnection(d_model, dropout)
-
-    def forward(self, x, mask=None):
-        # 自注意力 + 残差
-        x = self.residual1(x, lambda x: self.attention(x, mask))
-        # 前馈网络 + 残差
-        x = self.residual2(x, self.feed_forward)
-        return x
-
-class Encoder(nn.Module):
-    def __init__(self, n_layers=6, d_model=512, n_heads=8):
-        super().__init__()
-        self.layers = nn.ModuleList([
-            EncoderLayer(d_model, n_heads) for _ in range(n_layers)
-        ])
-
-    def forward(self, x, mask=None):
-        for layer in self.layers:
-            x = layer(x, mask)
-        return x
-```
+见【代码3-9】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### Decoder：带Mask的生成器
 
@@ -851,60 +712,21 @@ class Encoder(nn.Module):
 1. **Masked Self-Attention**：生成时不能看到未来的词
 2. **Encoder-Decoder Attention**：接收编码器的输出作为K和V
 
-```python
-def create_look_ahead_mask(seq_len):
-    """创建下三角掩码，防止看到未来"""
-    mask = torch.tril(torch.ones(seq_len, seq_len))
-    return mask.unsqueeze(0).unsqueeze(0)  # [1, 1, seq_len, seq_len]
-
-# 使用示例
-mask = create_look_ahead_mask(10)
-# mask[0, 0, 3, :] = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]
-# 位置3只能看到位置0,1,2,3
-```
+见【代码3-10】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 实战踩坑经验
 
 **坑1：维度对不上**
-```python
-# ❌ 新手常犯错误
-Q = self.W_Q(x)  # [batch, seq, d_model]
-K = self.W_K(x)  # [batch, seq, d_model]
-attention = torch.bmm(Q, K.T)  # 报错！K.T不对
-
-# ✅ 正确做法
-attention = torch.matmul(Q, K.transpose(-2, -1))
-# 或者
-attention = Q @ K.transpose(-2, -1)
-```
+见【代码3-11】(详见 files/formulas/第三节/第三章-代码.md)
 
 **坑2：忘记缩放**
-```python
-# ❌ 不缩放，梯度容易爆炸
-scores = Q @ K.transpose(-2, -1)
-
-# ✅ 除以根号d_k稳定训练
-scores = (Q @ K.transpose(-2, -1)) / math.sqrt(d_k)
-```
+见【代码3-12】(详见 files/formulas/第三节/第三章-代码.md)
 
 **坑3：位置编码当参数训练**
-```python
-# ❌ 位置编码不应该被训练
-self.pos_encoding = nn.Parameter(torch.randn(max_len, d_model))
-
-# ✅ 用register_buffer固定
-self.register_buffer('pos_encoding', create_positional_encoding(max_len, d_model))
-```
+见【代码3-13】(详见 files/formulas/第三节/第三章-代码.md)
 
 **坑4：Layer Norm位置**
-```python
-# Post-LN（原论文）
-x = x + sublayer(layer_norm(x))
-
-# Pre-LN（更稳定）
-x = x + sublayer(x)
-x = layer_norm(x)
-```
+见【代码3-14】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 为什么Transformer这么强？
 
@@ -947,40 +769,24 @@ x = layer_norm(x)
 
 **最简单的SGD（随机梯度下降）**
 
-```python
-# 最朴素的更新方式
-for batch in dataloader:
-    loss = model(batch)
-    loss.backward()  # 算梯度
-
-    # 手动更新参数（实际用optimizer.step()）
-    for param in model.parameters():
-        param.data -= learning_rate * param.grad
-```
+见【代码3-15】(详见 files/formulas/第三节/第三章-代码.md)
 
 问题来了——SGD太慢了！就像你走迷宫，每一步都小心翼翼，遇到小坑就卡住了。
 
 **带动量的SGD：像滚雪球**
 
-```python
-optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
-```
+见【代码3-16】(详见 files/formulas/第三节/第三章-代码.md)
 
 动量是啥？想象你推一个球下山：
 - 没动量：球在每个小坑都会停
 - 有动量：球有惯性，能冲过小坑继续滚
 
 实际效果对比：
-```python
-# 普通SGD训练ResNet50，100个epoch才收敛
-# 加了momentum=0.9，60个epoch就够了
-```
+见【代码3-17】(详见 files/formulas/第三节/第三章-代码.md)
 
 **Adam：懒人首选**
 
-```python
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-```
+见【代码3-18】(详见 files/formulas/第三节/第三章-代码.md)
 
 Adam聪明在哪？
 1. 自适应学习率——每个参数都有自己的学习率
@@ -988,56 +794,18 @@ Adam聪明在哪？
 3. 几乎不用调参——设lr=1e-3基本就行
 
 具体原理（看不懂可以跳过）：
-```python
-# Adam内部大概这么算的
-class SimpleAdam:
-    def __init__(self, params, lr=1e-3, betas=(0.9, 0.999)):
-        self.params = params
-        self.lr = lr
-        self.beta1, self.beta2 = betas
-        self.m = {}  # 一阶矩（动量）
-        self.v = {}  # 二阶矩（梯度平方的滑动平均）
-        self.t = 0   # 时间步
-
-    def step(self):
-        self.t += 1
-        for param in self.params:
-            grad = param.grad
-
-            # 更新一阶矩和二阶矩
-            self.m[param] = self.beta1 * self.m.get(param, 0) + (1 - self.beta1) * grad
-            self.v[param] = self.beta2 * self.v.get(param, 0) + (1 - self.beta2) * grad**2
-
-            # 偏差修正（刚开始时m和v都接近0，需要修正）
-            m_hat = self.m[param] / (1 - self.beta1**self.t)
-            v_hat = self.v[param] / (1 - self.beta2**self.t)
-
-            # 更新参数
-            param.data -= self.lr * m_hat / (v_hat**0.5 + 1e-8)
-```
+见【代码3-19】(详见 files/formulas/第三节/第三章-代码.md)
 
 **什么时候用什么优化器？**
 
 做CV（计算机视觉）：
-```python
-# ResNet、VGG这种，SGD+Momentum效果好
-optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
-# 但是要配合学习率衰减，不然后期会震荡
-```
+见【代码3-20】(详见 files/formulas/第三节/第三章-代码.md)
 
 做NLP或Transformer：
-```python
-# Adam几乎是标配
-optimizer = torch.optim.Adam(model.parameters(), lr=3e-4)
-# BERT微调时学习率要小
-optimizer = torch.optim.Adam(model.parameters(), lr=2e-5)
-```
+见【代码3-21】(详见 files/formulas/第三节/第三章-代码.md)
 
 做强化学习：
-```python
-# PPO这种用Adam，学习率更小
-optimizer = torch.optim.Adam(model.parameters(), lr=3e-5)
-```
+见【代码3-22】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 学习率调度：训练的节奏感
 
@@ -1046,66 +814,16 @@ optimizer = torch.optim.Adam(model.parameters(), lr=3e-5)
 **最常用的几种调度器**
 
 1. **阶梯式下降**（训练CNN常用）
-```python
-# 每30个epoch，学习率乘以0.1
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
-
-# 训练循环
-for epoch in range(100):
-    train_one_epoch()
-    scheduler.step()  # 别忘了调用！
-
-    # 实际的学习率变化：
-    # epoch 0-29:  lr = 0.1
-    # epoch 30-59: lr = 0.01
-    # epoch 60-89: lr = 0.001
-```
+见【代码3-23】(详见 files/formulas/第三节/第三章-代码.md)
 
 2. **余弦退火**（比阶梯更平滑）
-```python
-# T_max是半个余弦周期
-scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=50)
-
-# 学习率像余弦函数一样平滑下降
-# 不会突然掉cliff，训练更稳定
-```
+见【代码3-24】(详见 files/formulas/第三节/第三章-代码.md)
 
 3. **Warmup**（Transformer必备）
-```python
-# Transformer论文的warmup公式
-class WarmupScheduler:
-    def __init__(self, optimizer, d_model, warmup_steps):
-        self.optimizer = optimizer
-        self.d_model = d_model
-        self.warmup_steps = warmup_steps
-        self.step_num = 0
-
-    def step(self):
-        self.step_num += 1
-        # 先线性增长，后按step^-0.5下降
-        lr = self.d_model**(-0.5) * min(
-            self.step_num**(-0.5),
-            self.step_num * self.warmup_steps**(-1.5)
-        )
-        for param_group in self.optimizer.param_groups:
-            param_group['lr'] = lr
-
-# 为啥需要warmup？
-# 刚开始模型参数是随机的，梯度很大
-# 如果学习率也大，容易飞掉
-# 所以先用小学习率"热身"
-```
+见【代码3-25】(详见 files/formulas/第三节/第三章-代码.md)
 
 实际使用时，可以用transformers库：
-```python
-from transformers import get_linear_schedule_with_warmup
-
-scheduler = get_linear_schedule_with_warmup(
-    optimizer,
-    num_warmup_steps=1000,  # 前1000步warmup
-    num_training_steps=10000  # 总共10000步
-)
-```
+见【代码3-26】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 防止过拟合：正则化技术
 
@@ -1114,21 +832,7 @@ scheduler = get_linear_schedule_with_warmup(
 **Dropout：随机关闭神经元**
 
 ```python
-class MyModel(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.fc1 = nn.Linear(784, 256)
-        self.dropout1 = nn.Dropout(0.5)  # 50%概率关闭
-        self.fc2 = nn.Linear(256, 10)
-        self.dropout2 = nn.Dropout(0.2)  # 20%概率关闭
-
-    def forward(self, x):
-        x = F.relu(self.fc1(x))
-        x = self.dropout1(x)  # 训练时随机置零，测试时不变
-        x = self.fc2(x)
-        x = self.dropout2(x)
-        return x
-```
+见【代码3-27】(详见 files/formulas/第三节/第三章-代码.md)
 
 不同场景dropout设多少？
 - 全连接层：0.5是经典值（Hinton论文）
@@ -1140,21 +844,7 @@ class MyModel(nn.Module):
 
 这俩都是归一化，但归一化的维度不同：
 
-```python
-# 假设输入 x 的形状是 [batch_size=32, seq_len=100, hidden=512]
-
-# BatchNorm: 对batch维度归一化
-bn = nn.BatchNorm1d(512)
-# 它会计算这32个样本在每个特征上的均值和方差
-
-# LayerNorm: 对特征维度归一化
-ln = nn.LayerNorm(512)
-# 它会计算每个样本512个特征的均值和方差
-
-# 直观理解：
-# BatchNorm: "这批人的平均身高是多少？"
-# LayerNorm: "这个人的各项指标平均是多少？"
-```
+见【代码3-28】(详见 files/formulas/第三节/第三章-代码.md)
 
 为啥Transformer用LayerNorm不用BatchNorm？
 1. BatchNorm依赖batch size，batch小了不稳定
@@ -1173,24 +863,9 @@ Label smoothing把它变成：
 ```python
 # smooth_factor = 0.1
 label = [0.05, 0.9, 0.05]  # 90%确信是类别1，各留5%可能
-
-class LabelSmoothingLoss(nn.Module):
-    def __init__(self, classes, smoothing=0.1):
-        super().__init__()
-        self.smoothing = smoothing
-        self.classes = classes
-
-    def forward(self, pred, target):
-        # pred: [batch, classes]的logits
-        # target: [batch]的类别索引
-
-        # 创建smooth的标签
-        smooth_label = torch.full_like(pred, self.smoothing / (self.classes - 1))
-        smooth_label.scatter_(1, target.unsqueeze(1), 1 - self.smoothing)
-
-        # 用KL散度作为损失
-        return F.kl_div(F.log_softmax(pred, dim=1), smooth_label, reduction='sum')
 ```
+
+见【代码3-29】(详见 files/formulas/第三节/第三章-代码.md)
 
 效果：模型不会过度自信，泛化性更好。特别是数据有标注噪声时很有用。
 
@@ -1199,29 +874,7 @@ class LabelSmoothingLoss(nn.Module):
 正常训练用float32（32位浮点数），混合精度用float16（16位），显存省一半，速度快2-3倍！
 
 ```python
-from torch.cuda.amp import autocast, GradScaler
-
-# 创建梯度缩放器（防止fp16下溢）
-scaler = GradScaler()
-
-for batch in dataloader:
-    optimizer.zero_grad()
-
-    # 自动混合精度
-    with autocast():
-        outputs = model(batch['input'])  # 前向用fp16
-        loss = criterion(outputs, batch['target'])
-
-    # 反向传播
-    scaler.scale(loss).backward()  # 梯度缩放
-    scaler.step(optimizer)  # 更新参数
-    scaler.update()  # 更新缩放器
-
-# 注意事项：
-# 1. 只在GPU上有用，CPU不支持
-# 2. 老GPU（比如1080Ti）不支持，需要Volta架构以上（V100, 2080, 3090等）
-# 3. 有些操作不稳定，比如BatchNorm有时会有问题
-```
+见【代码3-30】(详见 files/formulas/第三节/第三章-代码.md)
 
 什么时候用混合精度？
 - 模型很大，显存不够：必须用
@@ -1230,21 +883,7 @@ for batch in dataloader:
 
 混合精度的坑：
 ```python
-# ❌ 梯度可能下溢变成0
-loss.backward()
-
-# ✅ 用GradScaler防止下溢
-scaler.scale(loss).backward()
-
-# ❌ 某些loss在fp16下不稳定
-mae_loss = torch.mean(torch.abs(pred - target))
-
-# ✅ 手动指定用fp32
-with autocast():
-    features = model(x)  # fp16
-    with torch.cuda.amp.autocast(enabled=False):
-        loss = custom_loss(features.float(), target.float())  # fp32
-```
+见【代码3-31】(详见 files/formulas/第三节/第三章-代码.md)
 
 ---
 
@@ -1255,99 +894,26 @@ with autocast():
 **Conda**
 
 Conda的基本操作：
-```bash
-# 创建新环境（相当于给项目一个独立房间）
-conda create -n robotsim python=3.9
-# -n 是name的缩写，robotsim是环境名字，随便起
-
-# 激活环境（进入这个房间）
-conda activate robotsim
-# 你会看到命令行前面多了 (robotsim)
-
-# 查看所有环境
-conda env list
-# 带*号的是当前激活的
-
-# 删除不要的环境
-conda remove -n old_env --all
-```
+见【代码3-32】(详见 files/formulas/第三节/第三章-代码.md)
 
 安装PyTorch的正确姿势：
-```bash
-# 先看你的CUDA版本
-nvidia-smi  # 右上角会显示CUDA Version: 11.8
-
-# 去PyTorch官网(pytorch.org)选对应版本
-# 比如CUDA 11.8：
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
-
-# 验证安装
-python -c "import torch; print(torch.cuda.is_available())"  # 应该输出True
-```
+见【代码3-33】(详见 files/formulas/第三节/第三章-代码.md)
 
 环境导出和复现（重要！）：
-```bash
-# 导出当前环境到yml文件
-conda env export > environment.yml
-
-# 但这个文件太详细了，跨平台可能有问题
-# 更好的方式是只导出你explicitly安装的包：
-conda env export --from-history > environment.yml
-
-# 别人拿到你的yml文件后：
-conda env create -f environment.yml
-```
+见【代码3-34】(详见 files/formulas/第三节/第三章-代码.md)
 
 Conda和pip混用的技巧：
-```python
-# 先用conda装大件（numpy, scipy, pytorch这些）
-conda install numpy scipy matplotlib
-
-# 再用pip装小包或conda没有的
-pip install transformers datasets
-
-# 为啥这个顺序？
-# conda会处理系统级依赖（比如MKL、CUDA），pip不会
-# 如果先pip后conda，可能会破坏pip装的包
-```
+见【代码3-35】(详见 files/formulas/第三节/第三章-代码.md)
 
 **Docker：终极解决方案**
 
 Conda还是可能出问题（比如系统库不同），Docker是真正的"带环境运行"。
 
 最简单的Dockerfile：
-```dockerfile
-# 基础镜像（别人已经装好PyTorch的）
-FROM pytorch/pytorch:2.0.1-cuda11.8-cudnn8-runtime
-
-# 设置工作目录
-WORKDIR /workspace
-
-# 复制代码
-COPY . .
-
-# 安装额外依赖
-RUN pip install transformers wandb
-
-# 运行命令
-CMD ["python", "train.py"]
-```
+见【代码3-36】(详见 files/formulas/第三节/第三章-代码.md)
 
 构建和运行：
-```bash
-# 构建镜像
-docker build -t my_robot_model .
-# -t 是tag，给镜像起个名字
-
-# 运行容器
-docker run --gpus all -it my_robot_model
-# --gpus all 让容器能用GPU
-# -it 是交互模式，能看到输出
-
-# 挂载本地目录（开发时常用）
-docker run --gpus all -v /home/user/data:/workspace/data -it my_robot_model
-# -v 是volume，把本地/home/user/data挂载到容器的/workspace/data
-```
+见【代码3-37】(详见 files/formulas/第三节/第三章-代码.md)
 
 Docker的坑：
 1. Windows上路径要用绝对路径，斜杠方向要注意
@@ -1361,41 +927,7 @@ Docker的坑：
 **WandB（Weights & Biases）入门**
 
 ```python
-import wandb
-
-# 初始化（第一次要去wandb.ai注册账号）
-wandb.init(
-    project="robot-grasping",  # 项目名
-    name="exp-2024-01-15",      # 本次实验名字
-    config={
-        "learning_rate": 1e-3,
-        "batch_size": 32,
-        "model": "resnet50",
-        "epochs": 100
-    }
-)
-
-# 训练循环中记录
-for epoch in range(100):
-    train_loss = train_one_epoch()
-    val_loss, val_acc = validate()
-
-    # 记录到wandb
-    wandb.log({
-        "train_loss": train_loss,
-        "val_loss": val_loss,
-        "val_acc": val_acc,
-        "epoch": epoch
-    })
-
-    # 还能记录图片
-    if epoch % 10 == 0:
-        fig = plot_predictions()
-        wandb.log({"predictions": wandb.Image(fig)})
-
-# 结束
-wandb.finish()
-```
+见【代码3-38】(详见 files/formulas/第三节/第三章-代码.md)
 
 WandB会自动生成漂亮的可视化界面，能看到：
 - 损失曲线
@@ -1405,40 +937,12 @@ WandB会自动生成漂亮的可视化界面，能看到：
 
 更高级的用法：
 ```python
-# 超参数搜索
-sweep_config = {
-    'method': 'bayes',  # 贝叶斯优化
-    'parameters': {
-        'learning_rate': {'min': 1e-5, 'max': 1e-2},
-        'batch_size': {'values': [16, 32, 64]},
-        'dropout': {'min': 0.1, 'max': 0.5}
-    }
-}
-
-sweep_id = wandb.sweep(sweep_config, project="robot-grasping")
-wandb.agent(sweep_id, train_function, count=50)  # 跑50次实验
-```
+见【代码3-39】(详见 files/formulas/第三节/第三章-代码.md)
 
 **TensorBoard（备选）**
 
 如果不想用云服务，TensorBoard是本地方案：
-```python
-from torch.utils.tensorboard import SummaryWriter
-
-writer = SummaryWriter('runs/exp1')
-
-for epoch in range(100):
-    loss = train()
-    writer.add_scalar('Loss/train', loss, epoch)
-
-    # 记录模型权重分布
-    for name, param in model.named_parameters():
-        writer.add_histogram(name, param, epoch)
-
-writer.close()
-
-# 查看：tensorboard --logdir=runs
-```
+见【代码3-40】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 实验可重复性：让结果能复现
 
@@ -1446,218 +950,55 @@ writer.close()
 
 **固定随机种子**
 ```python
-import random
-import numpy as np
-import torch
-
-def set_seed(seed=42):
-    """完全固定随机性"""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)  # 多GPU
-
-    # 这两个会降低性能，但保证完全可重复
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-
-# 在代码最开始调用
-set_seed(2024)
-```
+见【代码3-41】(详见 files/formulas/第三节/第三章-代码.md)
 
 但注意，完全固定会让训练变慢（特别是cudnn.benchmark=False）。折中方案：
-```python
-def set_seed_loose(seed=42):
-    """部分固定，性能更好"""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-
-    # 不设置这两个，速度快但可能有细微差异
-    # torch.backends.cudnn.deterministic = True
-    # torch.backends.cudnn.benchmark = False
-```
+见【代码3-42】(详见 files/formulas/第三节/第三章-代码.md)
 
 **配置文件管理**
 
 别把超参数硬编码在代码里：
 ```yaml
-# config.yaml
-model:
-  name: resnet50
-  pretrained: true
-  num_classes: 10
-
-training:
-  batch_size: 32
-  learning_rate: 0.001
-  epochs: 100
-  optimizer: adam
-
-data:
-  train_path: /data/train
-  val_path: /data/val
-  num_workers: 4
-```
+见【代码3-43】(详见 files/formulas/第三节/第三章-代码.md)
 
 读取配置：
-```python
-import yaml
-from argparse import ArgumentParser
-
-# 读取yaml
-with open('config.yaml') as f:
-    config = yaml.load(f, Loader=yaml.FullLoader)
-
-# 命令行参数覆盖配置文件
-parser = ArgumentParser()
-parser.add_argument('--batch_size', type=int, default=config['training']['batch_size'])
-parser.add_argument('--lr', type=float, default=config['training']['learning_rate'])
-args = parser.parse_args()
-
-# 使用
-batch_size = args.batch_size
-learning_rate = args.lr
-```
+见【代码3-44】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 代码组织：专业的项目结构
 
 别把所有代码都塞在一个train.py里！
 
 标准项目结构：
-```
-robot_grasping/
-├── configs/
-│   ├── default.yaml      # 默认配置
-│   └── experiments/       # 不同实验配置
-│       ├── resnet50.yaml
-│       └── vit.yaml
-├── data/
-│   ├── __init__.py
-│   ├── dataset.py        # 数据集定义
-│   └── transforms.py     # 数据增强
-├── models/
-│   ├── __init__.py
-│   ├── backbone.py       # 特征提取器
-│   ├── head.py          # 任务头
-│   └── losses.py        # 损失函数
-├── utils/
-│   ├── __init__.py
-│   ├── metrics.py       # 评价指标
-│   ├── visualization.py # 可视化
-│   └── logger.py        # 日志
-├── scripts/
-│   ├── train.py         # 训练脚本
-│   ├── evaluate.py      # 评估脚本
-│   └── inference.py     # 推理脚本
-├── notebooks/           # Jupyter实验
-│   └── explore_data.ipynb
-├── tests/              # 单元测试
-│   └── test_model.py
-├── README.md
-├── requirements.txt
-└── setup.py            # 包安装配置
-```
+见【代码3-45】(详见 files/formulas/第三节/第三章-代码.md)
 
 让代码可安装：
-```python
-# setup.py
-from setuptools import setup, find_packages
-
-setup(
-    name="robot_grasping",
-    version="0.1.0",
-    packages=find_packages(),
-    install_requires=[
-        "torch>=2.0.0",
-        "numpy>=1.20.0",
-        "wandb",
-    ]
-)
-
-# 这样就能 pip install -e . 安装你的包
-# 然后在任何地方 import robot_grasping
-```
+见【代码3-46】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 调试技巧：快速定位问题
 
 **打印shape是第一步**
 ```python
-def forward(self, x):
-    print(f"Input shape: {x.shape}")
-    x = self.conv1(x)
-    print(f"After conv1: {x.shape}")
-    x = self.pool(x)
-    print(f"After pool: {x.shape}")
-    # 很土但很有效！
-```
+见【代码3-47】(详见 files/formulas/第三节/第三章-代码.md)
 
 **用assert检查假设**
 ```python
-def process_batch(images, labels):
-    assert images.dim() == 4, f"Expected 4D tensor, got {images.dim()}D"
-    assert images.shape[0] == labels.shape[0], "Batch size mismatch"
-    assert images.min() >= 0 and images.max() <= 1, "Images not normalized"
-    # ...
-```
+见【代码3-48】(详见 files/formulas/第三节/第三章-代码.md)
 
 **梯度检查**
 ```python
-# 检查梯度是否正常
-for name, param in model.named_parameters():
-    if param.grad is not None:
-        grad_norm = param.grad.norm().item()
-        if grad_norm > 100:
-            print(f"Warning: large gradient in {name}: {grad_norm}")
-        if grad_norm == 0:
-            print(f"Warning: zero gradient in {name}")
-```
+见【代码3-49】(详见 files/formulas/第三节/第三章-代码.md)
 
 **常见错误和解决**
 
 1. **CUDA out of memory**
-```python
-# 方法1：减小batch size
-batch_size = 16  # 从32改到16
-
-# 方法2：梯度累积
-accumulation_steps = 4
-for i, batch in enumerate(dataloader):
-    loss = model(batch) / accumulation_steps
-    loss.backward()
-
-    if (i + 1) % accumulation_steps == 0:
-        optimizer.step()
-        optimizer.zero_grad()
-
-# 方法3：删除不用的变量
-del intermediate_output
-torch.cuda.empty_cache()
-```
+见【代码3-50】(详见 files/formulas/第三节/第三章-代码.md)
 
 2. **Loss变成NaN**
 ```python
-# 检查输入
-assert not torch.isnan(inputs).any()
-
-# 梯度裁剪
-torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-
-# 检查学习率
-if epoch > 50:
-    for param_group in optimizer.param_groups:
-        param_group['lr'] *= 0.1
-```
+见【代码3-51】(详见 files/formulas/第三节/第三章-代码.md)
 
 3. **DataLoader卡死**
-```python
-# Windows上容易出这个问题
-DataLoader(dataset, num_workers=0)  # 改成0
-
-# Linux上可以用更多workers
-DataLoader(dataset, num_workers=4, pin_memory=True)
-```
+见【代码3-52】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 多模态融合：让机器人有多种感知
 
@@ -1667,43 +1008,7 @@ DataLoader(dataset, num_workers=4, pin_memory=True)
 
 最简单的思路——把所有模态都编码成相同维度的向量：
 
-```python
-class MultiModalEncoder(nn.Module):
-    def __init__(self, d_model=512):
-        super().__init__()
-        # 不同模态用不同编码器
-        self.vision_encoder = nn.Linear(2048, d_model)  # ResNet特征
-        self.text_encoder = nn.Embedding(10000, d_model)  # 词嵌入
-        self.joint_encoder = nn.Linear(7, d_model)  # 7自由度机械臂
-        self.force_encoder = nn.Linear(6, d_model)  # 6轴力传感器
-
-    def forward(self, vision=None, text=None, joints=None, force=None):
-        tokens = []
-
-        if vision is not None:
-            # vision: [batch, 2048]
-            vision_tokens = self.vision_encoder(vision)  # [batch, d_model]
-            tokens.append(vision_tokens.unsqueeze(1))  # [batch, 1, d_model]
-
-        if text is not None:
-            # text: [batch, seq_len]
-            text_tokens = self.text_encoder(text)  # [batch, seq_len, d_model]
-            tokens.append(text_tokens)
-
-        if joints is not None:
-            # joints: [batch, 7]
-            joint_tokens = self.joint_encoder(joints)
-            tokens.append(joint_tokens.unsqueeze(1))
-
-        if force is not None:
-            # force: [batch, 6]
-            force_tokens = self.force_encoder(force)
-            tokens.append(force_tokens.unsqueeze(1))
-
-        # 拼接所有模态
-        multi_modal = torch.cat(tokens, dim=1)  # [batch, total_seq_len, d_model]
-        return multi_modal
-```
+见【代码3-53】(详见 files/formulas/第三节/第三章-代码.md)
 
 然后扔给Transformer处理，它会自动学习跨模态关系！
 
@@ -1724,71 +1029,13 @@ class MultiModalEncoder(nn.Module):
 怎么对齐？
 
 ```python
-# 方法1：下采样到最低频率（简单但损失信息）
-def align_to_vision_rate(vision_seq, joint_seq, force_seq):
-    # vision_seq: [T_v=30, ...]
-    # joint_seq: [T_j=100, ...]
-    # force_seq: [T_f=1000, ...]
-
-    # 下采样到30Hz
-    joint_downsampled = joint_seq[::3]    # 每3个取1个，100Hz→33Hz≈30Hz
-    force_downsampled = force_seq[::33]   # 每33个取1个，1000Hz→30Hz
-
-    return vision_seq, joint_downsampled, force_downsampled
-
-# 方法2：分层处理（保留高频信息）
-class HierarchicalFusion(nn.Module):
-    def __init__(self):
-        super().__init__()
-        # 高频融合器（1000Hz）
-        self.force_processor = nn.LSTM(6, 64)
-        # 中频融合器（100Hz）
-        self.joint_force_fusion = nn.LSTM(64+7, 128)
-        # 低频融合器（30Hz）
-        self.full_fusion = nn.LSTM(128+2048, 512)
-
-    def forward(self, vision, joints, force):
-        # Step1: 处理高频力信号（1000Hz）
-        force_features, _ = self.force_processor(force)  # [1000, 64]
-        # 池化到100Hz
-        force_100hz = F.adaptive_avg_pool1d(
-            force_features.transpose(0, 1).unsqueeze(0),
-            output_size=100
-        ).squeeze(0).transpose(0, 1)
-
-        # Step2: 融合中频信号（100Hz）
-        joint_force = torch.cat([joints, force_100hz], dim=-1)
-        mid_features, _ = self.joint_force_fusion(joint_force)
-        # 池化到30Hz
-        mid_30hz = mid_features[::3]
-
-        # Step3: 融合所有模态（30Hz）
-        full_input = torch.cat([vision, mid_30hz], dim=-1)
-        output, _ = self.full_fusion(full_input)
-
-        return output
-```
+见【代码3-54】(详见 files/formulas/第三节/第三章-代码.md)
 
 **实际场景的多模态策略**
 
 插USB（需要力反馈）：
 ```python
-def usb_insertion_policy(vision, force, joint):
-    # 阶段1：视觉引导接近
-    if not in_contact(force):
-        action = vision_servo(vision, target="usb_port")
-
-    # 阶段2：接触后切换到力控
-    else:
-        # 维持小的插入力，调整姿态
-        action = force_control(
-            force,
-            target_force=[0, 0, 5, 0, 0, 0],  # Z方向5N
-            compliance=[0.1, 0.1, 0.01, 0.5, 0.5, 0.5]  # XY柔顺，Z硬
-        )
-
-    return action
-```
+见【代码3-55】(详见 files/formulas/第三节/第三章-代码.md)
 
 #### 图神经网络（GAT）：理解场景关系
 
@@ -1801,108 +1048,21 @@ def usb_insertion_policy(vision, force, joint):
 - 边：物体间的关系（接触、遮挡、支撑）
 
 ```python
-class SceneGraph:
-    def __init__(self):
-        self.objects = []  # 节点列表
-        self.relations = []  # 边列表
-
-    def add_object(self, obj_id, features):
-        """添加物体节点"""
-        self.objects.append({
-            'id': obj_id,
-            'features': features,  # 位置、颜色、形状等
-            'type': detect_object_type(features)
-        })
-
-    def add_relation(self, obj1_id, obj2_id, rel_type):
-        """添加关系边"""
-        self.relations.append({
-            'source': obj1_id,
-            'target': obj2_id,
-            'type': rel_type  # 'on_top_of', 'occluding', 'near'等
-        })
-
-# 实际使用
-scene = SceneGraph()
-scene.add_object('cup_1', cup_features)
-scene.add_object('table_1', table_features)
-scene.add_relation('cup_1', 'table_1', 'on_top_of')
-```
+见【代码3-56】(详见 files/formulas/第三节/第三章-代码.md)
 
 **图注意力机制（GAT）**
 
 GAT让每个节点通过注意力机制聚合邻居信息：
 
 ```python
-class GraphAttentionLayer(nn.Module):
-    def __init__(self, in_dim, out_dim, dropout=0.1):
-        super().__init__()
-        self.W = nn.Linear(in_dim, out_dim, bias=False)
-        self.a = nn.Parameter(torch.randn(2 * out_dim, 1))
-        self.dropout = nn.Dropout(dropout)
-        self.leakyrelu = nn.LeakyReLU(0.2)
-
-    def forward(self, node_features, adjacency):
-        # node_features: [N, in_dim]
-        # adjacency: [N, N] 邻接矩阵
-
-        N = node_features.shape[0]
-        h = self.W(node_features)  # [N, out_dim]
-
-        # 计算注意力分数
-        # 这里用的是Veličković et al. 2018的方法
-        h_i = h.unsqueeze(1).repeat(1, N, 1)  # [N, N, out_dim]
-        h_j = h.unsqueeze(0).repeat(N, 1, 1)  # [N, N, out_dim]
-        concat = torch.cat([h_i, h_j], dim=-1)  # [N, N, 2*out_dim]
-
-        e = self.leakyrelu(torch.matmul(concat, self.a).squeeze(-1))  # [N, N]
-
-        # 只保留存在边的注意力
-        zero_vec = -9e15 * torch.ones_like(e)
-        attention = torch.where(adjacency > 0, e, zero_vec)
-        attention = F.softmax(attention, dim=-1)
-        attention = self.dropout(attention)
-
-        # 聚合邻居特征
-        h_prime = torch.matmul(attention, h)  # [N, out_dim]
-        return F.elu(h_prime)
-```
+见【代码3-57】(详见 files/formulas/第三节/第三章-代码.md)
 
 **实际应用：抓取规划**
 
 用GAT理解场景，找出最容易抓取的物体：
 
 ```python
-class GraspPlanner(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.gat1 = GraphAttentionLayer(512, 256)
-        self.gat2 = GraphAttentionLayer(256, 128)
-        self.grasp_score = nn.Linear(128, 1)  # 输出抓取分数
-
-    def forward(self, scene_graph):
-        # 提取特征和邻接矩阵
-        node_feats = torch.stack([obj['features'] for obj in scene_graph.objects])
-        adj_matrix = build_adjacency_matrix(scene_graph.relations)
-
-        # 两层GAT理解场景关系
-        x = self.gat1(node_feats, adj_matrix)
-        x = self.gat2(x, adj_matrix)
-
-        # 给每个物体打分
-        scores = self.grasp_score(x)  # [N, 1]
-
-        return scores
-
-# 使用时
-planner = GraspPlanner()
-scores = planner(scene_graph)
-best_object_idx = torch.argmax(scores)
-# 得分考虑了：
-# - 物体本身是否易抓（形状、大小）
-# - 是否被其他物体遮挡
-# - 抓取后是否会导致其他物体掉落
-```
+见【代码3-58】(详见 files/formulas/第三节/第三章-代码.md)
 
 **GAT在机器人中的典型应用**
 
