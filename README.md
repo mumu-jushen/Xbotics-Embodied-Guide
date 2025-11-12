@@ -798,65 +798,68 @@ v = J(q) · q̇  （速度正运动学）
 
 #### 实践要点
 
-- **坐标变换**：$T_A^B$ 表示从A到B，连续变换从右往左读
+- **坐标变换**： $T_A^B$ 表示从 A 到 B，连续变换从右往左读
 - **逆运动学**：优先解析解（快），数值解做后备
 - **轨迹规划**：简单任务用梯形速度，复杂用五次多项式
-- **MoveIt调试**：碰撞太严调`padding`，规划失败查起点碰撞
+- **MoveIt调试**：碰撞太严调 `padding`，规划失败查起点碰撞
 
 ---
 
 ### 3.2 深度学习打底：Self-Attention与Transformer
 
 #### 起步三件事
+
 ⭐ **必看**：[The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) - Jay Alammar的可视化讲解
+
 🧪 **实作**：手撕一个mini Transformer（<500行代码）
+
 📄 **论文**：[Attention Is All You Need](https://arxiv.org/abs/1706.03762) - 原始论文
 
 ![Transformer整体架构](files/images/第三节/transformer%20structure.png)
 
 #### [Transformer：从黑盒到掌握全貌](files/foundations/3.2-Transformer.md#transformer从黑盒到掌握全貌)
-- **第一层理解**：Transformer是一个黑盒子，输入法语，输出英语，显著提升机器翻译质量。
-- **第二层理解**：Transformer由编码器（Encoder）和解码器（Decoder）组成，原论文各用6层，但层数可变（如BERT用12层，GPT-3用96层）。
-- **第三层理解**：每一层编码器包含Self-Attention和Feed Forward操作，均配备残差连接和Layer Norm。
+- **第一层理解**：Transformer 是一个黑盒子，输入法语，输出英语，显著提升机器翻译质量。
+- **第二层理解**：Transformer 由编码器（Encoder）和解码器（Decoder）组成，原论文各用 6 层，但层数可变（如 BERT 用 12 层，GPT-3 用 96 层）。
+- **第三层理解**：每一层编码器包含 Self-Attention 和 Feed Forward 操作，均配备残差连接和 Layer Norm。
 
 #### [Self-Attention：核心中的核心](files/foundations/3.2-Transformer.md#self-attention核心中的核心)
-- **为啥需要Self-Attention**：让序列中任意两个位置能直接“对话”，解决传统RNN信息丢失和CNN窗口固定的问题。
-- **Query-Key-Value机制**：通过QKV计算注意力分数，公式为`scores = Q @ K.T / sqrt(d_k)`，除以`sqrt(d_k)`防止梯度消失。
+- **为啥需要 Self-Attention**：让序列中任意两个位置能直接“对话”，解决传统 RNN 信息丢失和 CNN 窗口固定的问题。
+- **Query-Key-Value 机制**：通过 QKV 计算注意力分数，公式为 `scores = Q @ K.T / sqrt(d_k)`，除以 `sqrt(d_k)` 防止梯度消失。
 - **注意力可视化**：通过可视化注意力权重，模型能正确学习指代关系。
 
 #### [多头注意力：团队协作](files/foundations/3.2-Transformer.md#多头注意力团队协作)
 - 多头注意力是多个专家团队，每个头负责不同维度，学习不同类型的关系（如局部语法、长距离依赖等）。
-- 代码示例展示了如何实现多头注意力，包括QKV的计算和多头的合并。
+- 代码示例展示了如何实现多头注意力，包括 QKV 的计算和多头的合并。
 
 #### [位置编码：告诉模型词序](files/foundations/3.2-Transformer.md#位置编码告诉模型词序)
-- Self-Attention无法感知词序，位置编码通过sin/cos函数解决，能表示相对位置关系。
+- Self-Attention 无法感知词序，位置编码通过 sin/cos 函数解决，能表示相对位置关系。
 - 代码示例展示了位置编码的实现。
 
 #### [残差连接与Layer Norm](files/foundations/3.2-Transformer.md#残差连接与layer-norm)
-- 每个子层使用残差连接（防止梯度消失）和Layer Norm（稳定输入分布），加速训练。
-- 代码示例展示了残差连接和Layer Norm的实现。
+- 每个子层使用残差连接（防止梯度消失）和 Layer Norm（稳定输入分布），加速训练。
+- 代码示例展示了残差连接和 Layer Norm 的实现。
 
 #### [Encoder完整实现](files/foundations/3.2-Transformer.md#encoder完整实现)
-- 编码器由多层EncoderLayer组成，每层包含多头注意力、前馈网络和残差连接。
+- 编码器由多层 EncoderLayer 组成，每层包含多头注意力、前馈网络和残差连接。
 - 代码示例展示了编码器的完整实现。
 
 #### [Decoder：带Mask的生成器](files/foundations/3.2-Transformer.md#decoder带mask的生成器)
-- 解码器比编码器多了Masked Self-Attention（防止看到未来）和Encoder-Decoder Attention（接收编码器输出）。
+- 解码器比编码器多了 Masked Self-Attention（防止看到未来）和 Encoder-Decoder Attention（接收编码器输出）。
 - 代码示例展示了如何创建下三角掩码。
 
 #### [实战踩坑经验](files/foundations/3.2-Transformer.md#实战踩坑经验)
-- 常见错误包括维度对不上、忘记缩放、位置编码当参数训练、Layer Norm位置错误。
+- 常见错误包括维度对不上、忘记缩放、位置编码当参数训练、Layer Norm 位置错误。
 - 提供了正确的代码示例和调试建议。
 
 #### 为什么Transformer这么强？
 
 **并行性**
-- RNN必须串行处理，第t步依赖第t-1步
-- Transformer可以并行处理整个序列，训练速度飞快
+- RNN 必须串行处理，第 t 步依赖第 t-1 步
+- Transformer 可以并行处理整个序列，训练速度飞快
 
 **长距离依赖**
-- RNN信息传递路径长，容易遗忘
-- Transformer任意两个位置都能直接交互
+- RNN 信息传递路径长，容易遗忘
+- Transformer 任意两个位置都能直接交互
 
 **表达能力**
 - 多头注意力 = 多个特征提取器并行工作
@@ -869,15 +872,15 @@ v = J(q) · q̇  （速度正运动学）
 | CNN | O(k·n·d²) | O(1) | O(log_k(n)) |
 | Transformer | O(n²·d) | O(1) | O(1) |
 
-虽然是O(n²)，但对于常见长度（<512），这不是瓶颈。瓶颈通常在d（模型维度）上。
+虽然是 O(n²)，但对于常见长度（<512），这不是瓶颈。瓶颈通常在d（模型维度）上。
 
 #### 调试技巧总结
 
-1. **先跑通小模型**：2层、128维度、4个头，确保流程正确
+1. **先跑通小模型**：2 层、128 维度、4 个头，确保流程正确
 2. **可视化注意力权重**：检查模型是否学到合理的模式
 3. **梯度裁剪**：`torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)`
-4. **学习率warmup必须有**：前4000步线性增长很重要
-5. **检查mask是否正确**：打印出来看看，很多bug在这
+4. **学习率warmup必须有**：前 4000 步线性增长很重要
+5. **检查mask是否正确**：打印出来看看，很多 bug 在这
 
 ---
 
@@ -887,7 +890,7 @@ v = J(q) · q̇  （速度正运动学）
 
 DDIM（Denoising Diffusion Implicit Models）是一种扩散模型的变体，旨在加速图像生成过程并保持生成质量。它是在 **DDPM**（Denoising Diffusion Probabilistic Models）的基础上发展出来的，提供了一种更高效的去噪采样过程，减少了采样所需的步骤数。
 
-在DDIM中，通过构造一种**确定性的去噪过程**，可以在显著减少采样步骤的情况下生成高质量图像。与传统的DDPM不同，DDIM不再依赖完全的随机采样过程，而是通过精确控制去噪路径，使得生成的样本更加可控，并允许在更少的步骤内完成采样。
+在 DDIM 中，通过构造一种**确定性的去噪过程**，可以在显著减少采样步骤的情况下生成高质量图像。与传统的 DDPM 不同，DDIM 不再依赖完全的随机采样过程，而是通过精确控制去噪路径，使得生成的样本更加可控，并允许在更少的步骤内完成采样。
 
 #### DDIM和DDPM的区别
 
@@ -916,18 +919,22 @@ DDIM 的主要目的是在加速采样的同时保留高质量的图像生成。
 **扩散过程**
 在扩散模型中，原始数据（如图像）通过逐步加噪声的方式转变为高斯噪声。这个加噪过程遵循如下的公式：
 
-\[ q(x_t|x_{t-1}) = \mathcal{N}(x_t; \sqrt{\alpha_t}x_{t-1}, (1 - \alpha_t)I) \]
+$$
+q(x_t|x_{t-1}) = \mathcal{N}(x_t; \sqrt{\alpha_t}x_{t-1}, (1 - \alpha_t)I)
+$$
 
-这里，$x_t$ 是在第 t 个时间步的噪声数据，$\alpha_t$ 是时间步的系数。这个公式描述了如何通过将噪声逐步加到数据上来生成噪声样本。
+这里， $x_t$ 是在第 t 个时间步的噪声数据， $\alpha_t$ 是时间步的系数。这个公式描述了如何通过将噪声逐步加到数据上来生成噪声样本。
 
 **去噪过程**
-在 DDPM 中，去噪过程反向执行，即从 $x_T$（完全噪声的样本）开始逐步去除噪声，生成 $x_0$（即数据样本）。这个去噪过程是逐步的，并且是随机的。
+在 DDPM 中，去噪过程反向执行，即从 $x_T$ （完全噪声的样本）开始逐步去除噪声，生成 $x_0$ （即数据样本）。这个去噪过程是逐步的，并且是随机的。
 
 在 DDIM 中，去噪过程是确定的，采样过程使用了一种新的公式，不需要每一步都添加随机噪声。具体来说，DDIM 推导出了一个可以直接从高斯噪声样本跳跃到纯净样本的新去噪方程：
 
-\[ x_{t-1} = \frac{1}{\sqrt{\alpha_{t-1}}}x_0 + \sqrt{1 - \alpha_{t-1}}\epsilon_t \]
+$$
+x_{t-1} = \frac{1}{\sqrt{\alpha_{t-1}}}x_0 + \sqrt{1 - \alpha_{t-1}}\epsilon_t
+$$
 
-其中，$x_0$ 是通过网络预测得到的纯净样本，$\epsilon_t$ 是噪声。
+其中， $x_0$ 是通过网络预测得到的纯净样本， $\epsilon_t$ 是噪声。
 
 通过这个公式，DDIM 能够在更少的时间步内从噪声生成样本。这种直接跳跃的去噪路径是 DDIM 比 DDPM 更高效的关键。
 
@@ -963,7 +970,7 @@ def ddim_sampling(model, x_T, num_steps, betas):"""
 ```
 
 #### 总结
-DDIM 相比于传统的DDPM，提供了一个加速的采样过程，能够通过确定性去噪生成高质量图像，同时显著减少采样步骤数量。它通过去除每一步的随机噪声引入，实现了一种隐式（Implicit）采样机制，使得同样的输入可以生成一致的样本。
+DDIM 相比于传统的 DDPM，提供了一个加速的采样过程，能够通过确定性去噪生成高质量图像，同时显著减少采样步骤数量。它通过去除每一步的随机噪声引入，实现了一种隐式（Implicit）采样机制，使得同样的输入可以生成一致的样本。
 
 DDIM 的优势在于：
 1. 加速采样过程，能够在更少的时间步内生成图像。
@@ -979,8 +986,8 @@ DDIM 的优势在于：
 #### [让模型真正学起来：优化器的选择](files/foundations/3.4-优化.md#让模型真正学起来优化器的选择)
 训练神经网络就像爬山找最低点，优化器决定了你怎么走。
 
-- **最简单的SGD（随机梯度下降）**：简单但收敛慢。
-- **带动量的SGD**：像滚雪球，能冲过小坑加速收敛。
+- **最简单的 SGD（随机梯度下降）**：简单但收敛慢。
+- **带动量的 SGD**：像滚雪球，能冲过小坑加速收敛。
 - **Adam**：自适应学习率，几乎不用调参，适合懒人。
 
 #### [学习率调度：训练的节奏感](files/foundations/3.4-优化.md#学习率调度训练的节奏感)
@@ -988,13 +995,13 @@ DDIM 的优势在于：
 
 - **阶梯式下降**：每固定步数降低学习率。
 - **余弦退火**：学习率像余弦函数一样平滑下降。
-- **Warmup**：先小学习率热身，适合Transformer。
+- **Warmup**：先小学习率热身，适合 Transformer。
 
 #### [防止过拟合：正则化技术](files/foundations/3.4-优化.md#防止过拟合正则化技术)
 模型太强会过拟合，需要正则化技术来控制。
 
 - **Dropout**：随机关闭神经元，防止过拟合。
-- **BatchNorm vs LayerNorm**：归一化技术，LayerNorm更适合Transformer。
+- **BatchNorm vs LayerNorm**：归一化技术，LayerNorm 更适合 Transformer。
 - **Label Smoothing**：让模型别太自信，泛化性更好。
 
 #### [混合精度训练：又快又省显存](files/foundations/3.4-优化.md#混合精度训练又快又省显存)
@@ -1002,7 +1009,7 @@ DDIM 的优势在于：
 
 - **使用`autocast`和`GradScaler`**：防止梯度下溢，加速训练。
 - **适用场景**：模型大、显存不够时必须用；想加速训练时推荐用。
-- **注意事项**：老GPU不支持，某些操作可能不稳定。
+- **注意事项**：老 GPU 不支持，某些操作可能不稳定。
 
 ---
 
@@ -1011,12 +1018,12 @@ DDIM 的优势在于：
 #### [环境管理：让代码在任何地方都能跑](files/foundations/3.5-工程环境.md#环境管理：让代码在任何地方都能跑)
 
 **Conda**
-- Conda的基本操作：创建、激活环境，安装PyTorch，导出和复现环境。
-- Conda和pip混用的技巧：先用conda装大件，再用pip装小包。
+- Conda 的基本操作：创建、激活环境，安装 PyTorch，导出和复现环境。
+- Conda 和 pip 混用的技巧：先用 conda 装大件，再用 pip 装小包。
 
 **Docker：终极解决方案**
-- Dockerfile示例：构建和运行容器，挂载本地目录。
-- Docker的坑：Windows路径问题、GPU支持、镜像大小。
+- Dockerfile 示例：构建和运行容器，挂载本地目录。
+- Docker 的坑：Windows 路径问题、GPU 支持、镜像大小。
 
 #### [实验追踪：WandB让你知道哪次实验效果好](files/foundations/3.5-工程环境.md#实验追踪：wandb让你知道哪次实验效果好)
 
@@ -1028,33 +1035,33 @@ DDIM 的优势在于：
 #### [实验可重复性：让结果能复现](files/foundations/3.5-工程环境.md#实验可重复性：让结果能复现)
 
 **固定随机种子**
-- 完全固定随机性（`torch.backends.cudnn.deterministic`和`benchmark`）。
+- 完全固定随机性（`torch.backends.cudnn.deterministic` 和 `benchmark`）。
 - 折中方案：部分固定，性能更好。
 
 **配置文件管理**
-- 使用YAML配置文件，命令行参数覆盖配置。
+- 使用 YAML 配置文件，命令行参数覆盖配置。
 
 #### [代码组织：专业的项目结构](files/foundations/3.5-工程环境.md#代码组织专业的项目结构)
 
 **标准项目结构**
-- 分层目录结构：`configs`、`data`、`models`、`utils`、`scripts`等。
-- 使用`setup.py`让代码可安装。
+- 分层目录结构：`configs`、`data`、`models`、`utils`、`scripts` 等。
+- 使用 `setup.py` 让代码可安装。
 
 #### [调试技巧：快速定位问题](files/foundations/3.5-工程环境.md#调试技巧快速定位问题)
 
 **打印shape是第一步**
-- 在每个模块打印输入输出shape。
+- 在每个模块打印输入输出 shape。
 
 **用assert检查假设**
 - 检查张量维度、值范围等。
 
 **梯度检查**
-- 检查梯度是否正常，避免NaN。
+- 检查梯度是否正常，避免 NaN。
 
 **常见错误和解决**
-- CUDA out of memory：减小batch size、梯度累积、删除变量。
-- Loss变成NaN：检查输入、梯度裁剪、调整学习率。
-- DataLoader卡死：调整`num_workers`。
+- CUDA out of memory：减小 batch size、梯度累积、删除变量。
+- Loss 变成 NaN：检查输入、梯度裁剪、调整学习率。
+- DataLoader 卡死：调整 `num_workers`。
 
 ---
 
@@ -1106,7 +1113,7 @@ class MultiModalEncoder(nn.Module):
         return multi_modal
 ```
 
-然后扔给Transformer处理，它会自动学习跨模态关系！
+然后扔给 Transformer 处理，它会自动学习跨模态关系！
 
 **跨模态注意力的实际效果**
 
@@ -1232,7 +1239,7 @@ scene.add_relation('cup_1', 'table_1', 'on_top_of')
 
 **图注意力机制（GAT）**
 
-GAT让每个节点通过注意力机制聚合邻居信息：
+GAT 让每个节点通过注意力机制聚合邻居信息：
 
 ```python
 class GraphAttentionLayer(nn.Module):
@@ -1271,7 +1278,7 @@ class GraphAttentionLayer(nn.Module):
 
 **实际应用：抓取规划**
 
-用GAT理解场景，找出最容易抓取的物体：
+用 GAT 理解场景，找出最容易抓取的物体：
 
 ```python
 class GraspPlanner(nn.Module):
@@ -1314,7 +1321,7 @@ best_object_idx = torch.argmax(scores)
 
 关键优势：
 - 自动学习"什么关系重要"（注意力权重）
-- 处理不规则结构（不像CNN需要网格）
+- 处理不规则结构（不像 CNN 需要网格）
 - 可解释性好（能可视化注意力）
 
 ---
