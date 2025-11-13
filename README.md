@@ -1127,7 +1127,7 @@ GAT让每个节点通过注意力机制聚合邻居信息：
 ，将<img width="50" height="31" alt="image" src="https://github.com/user-attachments/assets/cddbe3b3-c43b-497a-922e-610201eb5b76" />
 加入<img width="18" height="17" alt="image" src="https://github.com/user-attachments/assets/37696f6e-7ac2-41f0-984b-cbef161a5ee6" />。
 5. 重复训练直到收敛。
-   详见教材中算法说明。 ([algorithmsbook.com](https://algorithmsbook.com/files/chapter-18.pdf?utm_source=chatgpt.com "18 Imitation Learning"))
+   详见教材中算法说明。 ([来源](https://algorithmsbook.com/files/chapter-18.pdf?utm_source=chatgpt.com "18 Imitation Learning"))
 
 ##### 2.2 优点
 
@@ -1166,7 +1166,7 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 ，好于 BC 的<img width="110" height="33" alt="image" src="https://github.com/user-attachments/assets/90c85de0-5493-4b58-b2a4-cc780b077f6a" />
 。 ([arxiv.org](https://arxiv.org/abs/1911.07027?utm_source=chatgpt.com "On Value Discrepancy of Imitation Learning"))
 * 能适应更灵活的行为复制（不仅仅是专家动作的直接复制）——通过交互获得更多样本。
-* 在仿真任务中通常优于 BC。 ([ziiiliu.github.io](https://ziiiliu.github.io/files/R255_zl413_Topic_1.pdf?utm_source=chatgpt.com "Generative Adversarial Imitation Learning Benchmarking and ..."))
+* 在仿真任务中通常优于 BC。 ([来源](https://ziiiliu.github.io/files/R255_zl413_Topic_1.pdf?utm_source=chatgpt.com "Generative Adversarial Imitation Learning Benchmarking and ..."))
 
 ##### 3.3 缺点与挑战
 
@@ -1177,7 +1177,7 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 ##### 3.4 经典论文／引用
 
 * Ho, Jonathan & Ermon, Stefano, “Generative Adversarial Imitation Learning”, NeurIPS 2016.
-* 相关综述：Liu, Z. “Generative Adversarial Imitation Learning Benchmarking and …” ([ziiiliu.github.io](https://ziiiliu.github.io/files/R255_zl413_Topic_1.pdf?utm_source=chatgpt.com "Generative Adversarial Imitation Learning Benchmarking and ..."))
+* 相关综述：Liu, Z. “Generative Adversarial Imitation Learning Benchmarking and …” ([来源](https://ziiiliu.github.io/files/R255_zl413_Topic_1.pdf?utm_source=chatgpt.com "Generative Adversarial Imitation Learning Benchmarking and ..."))
 
 
 #### 4. 三者关系与误差累积视角总结
@@ -1262,7 +1262,7 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 * Actor 根据 Critic 的反馈更新策略参数。
 * 重复直至收敛。
 
-这一结构使得策略优化中方差控制更好，学习更高效。 ([busoniu.net](https://busoniu.net/files/papers/ivo_smcc12_survey.pdf?utm_source=chatgpt.com "A Survey of Actor-Critic Reinforcement Learning"))
+这一结构使得策略优化中方差控制更好，学习更高效。 ([来源](https://busoniu.net/files/papers/ivo_smcc12_survey.pdf?utm_source=chatgpt.com "A Survey of Actor-Critic Reinforcement Learning"))
 
 ##### 3.2 优势
 
@@ -1273,9 +1273,9 @@ GAIL（Generative Adversarial Imitation Learning）借鉴了生成对抗网络�
 ##### 3.3 收敛与稳定性问题
 
 * 虽然在表格、小规模模型中可获得理论收敛保证，但在函数逼近／深度网络场景下仍缺乏通用的稳定性证明。
-* 例如，有研究指出：Actor-Critic 方法尽管理论上“通常具有良好收敛性质”，但在现实深度学习场景中仍可能“非常不稳定”或“样本效率低”。 ([busoniu.net](https://busoniu.net/files/papers/ivo_smcc12_survey.pdf?utm_source=chatgpt.com "A Survey of Actor-Critic Reinforcement Learning"))
-* 针对闭环控制系统（如机器人控制），还需考虑系统“稳定性”（如闭环收敛、扰动鲁棒性）的问题。有工作结合 Lyapunov 方法提出“具稳定性保证”的 Actor-Critic 框架。 ([ResearchGate](https://www.researchgate.net/publication/343173949_Actor-Critic_Reinforcement_Learning_for_Control_With_Stability_Guarantee?utm_source=chatgpt.com "(PDF) Actor-Critic Reinforcement Learning for Control With ..."))
-* 最新有关两时尺度 Actor-Critic 法的收敛性研究亦在推进中。 ([par.nsf.gov](https://par.nsf.gov/servlets/purl/10462369?utm_source=chatgpt.com "Global Convergence of Two-Timescale Actor-Critic for ..."))
+* 例如，有研究指出：Actor-Critic 方法尽管理论上“通常具有良好收敛性质”，但在现实深度学习场景中仍可能“非常不稳定”或“样本效率低”。 ([来源](https://busoniu.net/files/papers/ivo_smcc12_survey.pdf?utm_source=chatgpt.com "A Survey of Actor-Critic Reinforcement Learning"))
+* 针对闭环控制系统（如机器人控制），还需考虑系统“稳定性”（如闭环收敛、扰动鲁棒性）的问题。有工作结合 Lyapunov 方法提出“具稳定性保证”的 Actor-Critic 框架。 ([来源](https://www.researchgate.net/publication/343173949_Actor-Critic_Reinforcement_Learning_for_Control_With_Stability_Guarantee?utm_source=chatgpt.com "(PDF) Actor-Critic Reinforcement Learning for Control With ..."))
+* 最新有关两时尺度 Actor-Critic 法的收敛性研究亦在推进中。 ([来源](https://par.nsf.gov/servlets/purl/10462369?utm_source=chatgpt.com "Global Convergence of Two-Timescale Actor-Critic for ..."))
  
 
 #### 4. 三者关系、收敛与稳定性视角总结
@@ -1380,7 +1380,7 @@ CLIP（Contrastive Language–Image Pre-training）由 OpenAI 提出，用于用
 
 ##### 3.3 主要能力与应用
 
-* ​**零样本分类**​：给定类别文本提示 (e.g. “a photo of a {class}.”)，直接用文本编码与图像编码比对，无需微调。 [milvus.io**+1**](https://milvus.io/ai-quick-reference/how-does-clip-contrastive-languageimage-pretraining-work-for-multimodal-embeddings?utm_source=chatgpt.com)
+* ​**零样本分类**​：给定类别文本提示 (e.g. “a photo of a {class}.”)，直接用文本编码与图像编码比对，无需微调。 [来源](https://milvus.io/ai-quick-reference/how-does-clip-contrastive-languageimage-pretraining-work-for-multimodal-embeddings?utm_source=chatgpt.com)
 * ​**图像-文本检索**​：通过在共享嵌入空间中比对，支持图像检索文本或文本检索图像。
 * ​**迁移学习​**​：图像编码器可作为通用视觉表征器，应用于多种下游视觉任务。
 
@@ -1426,7 +1426,7 @@ SigLIP（Sigmoid Loss for Language–Image Pre-training）于 2023 年提出，�
 
 ##### 1.1 定义与区别
 
-* ​**轨迹优化（Trajectory Optimization）**​：给定系统动力学、初始状态、目标状态与时间 区间，通过优化求取状态轨迹 ({x(t),u(t)}) 使得某个代价函数最小。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* ​**轨迹优化（Trajectory Optimization）**​：给定系统动力学、初始状态、目标状态与时间 区间，通过优化求取状态轨迹 ({x(t),u(t)}) 使得某个代价函数最小。 ([paper](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
 * ​**实时控制（Real-time Control）**​：在系统运行中，基于当前状态和预测模型，快速计算控制输入 (u) 以驱动系统达到期望行为，比如跟踪、避障、稳定等。
 * 轨迹优化往往是**离线或准实时**的（可做规划、初始化），而实时控制则强调​**在线快速响应**​、实时性、高频率执行。
 * 在机器人系统中，两者经常结合使用：轨迹优化生成参考或初始解，实时控制负责闭环执行、修正扰动与模型误差。
@@ -1453,7 +1453,7 @@ SigLIP（Sigmoid Loss for Language–Image Pre-training）于 2023 年提出，�
 ![Image](https://tiemchart.com/new_website_24/wp-content/uploads/2018/03/Backward-Pass-Calculation.jpg)
 
 
-* iLQR（Iterative Linear Quadratic Regulator）是一种轨迹优化方法：从初始猜测的轨迹出发，对系统动力学线性化、对成本函数二次近似，然后通过一次向后-向前的 Riccati 回传计算增益与改进轨迹。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* iLQR（Iterative Linear Quadratic Regulator）是一种轨迹优化方法：从初始猜测的轨迹出发，对系统动力学线性化、对成本函数二次近似，然后通过一次向后-向前的 Riccati 回传计算增益与改进轨迹。 ([来源](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
 * 具体流程：
   1. 给定系统 (\\dot x = f(x,u))，初始轨迹 ((x\_0(t),u\_0(t)))。
   2. 在该轨迹附近线性化动力学，二次化成本。
@@ -1465,13 +1465,13 @@ SigLIP（Sigmoid Loss for Language–Image Pre-training）于 2023 年提出，�
 
 **优势**
 
-* 收敛较快：相比一般梯度下降，iLQR 利用了 LQR 结构，效率较高。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* 收敛较快：相比一般梯度下降，iLQR 利用了 LQR 结构，效率较高。 ([来源](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
 * 可以处理非线性系统，只要线性化近似合理。
 * 得到轨迹与增益，可用于轨迹追踪或下游控制。
 
 **局限**
 
-* 通常不显式处理状态／输入约束：原始 iLQR 更适合无约束或轻约束情形。 ([underactuated.mit.edu](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
+* 通常不显式处理状态／输入约束：原始 iLQR 更适合无约束或轻约束情形。 ([来源](https://underactuated.mit.edu/trajopt.html?utm_source=chatgpt.com "Ch. 10 - Trajectory Optimization - Underactuated Robotics"))
 * 局部最优：依赖初始轨迹猜测；可能陷入局部极小。
 * 对大规模或高度非线性系统可能表现受限。
 
@@ -1830,7 +1830,7 @@ W. et al. 提出 **ScaleDP**，将模型参数规模扩展至 10⁹ 级，实现
 
 **发布时间**: 2025年10月  
 **来源**: PI (具身智能) 团队  
-**论文链接**: [PI官方发布](https://pi-ai.github.io/paper/pi0.5)  
+**论文链接**: [paper](https://pi-ai.github.io/paper/pi0.5)  
 **技术框架**:  
 - **架构改进**: 在π₀基础上增加多模态感知融合层，支持更精细的动作控制  
 - **性能提升**:  
@@ -1846,7 +1846,7 @@ W. et al. 提出 **ScaleDP**，将模型参数规模扩展至 10⁹ 级，实现
 - 工业自动化场景中的多机器人协作  
 - 服务机器人日常交互  
 
-**GitHub链接**: [https://github.com/pi-ai/pi0.5](https://github.com/pi-ai/pi0.5)  
+**GitHub链接**: [code](https://github.com/pi-ai/pi0.5)  
 
 
 ######  LLaDA-VLA: Vision Language Diffusion Action Models
