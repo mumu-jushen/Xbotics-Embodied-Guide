@@ -4024,7 +4024,7 @@ GroundPlaneCfg 配置了一个类似网格的地面平面，其外观和大小�
 
 #### 5、**样板：Isaac Lab 最小上手（可复制运行）**
 
-见代码6-1，6-2，6-3 分别为train.py, play.py 及 isaaclab.sh。
+见【代码6-1，6-2，6-3】(详见 files/formulas/第六节.md) 分别为train.py, play.py 及 isaaclab.sh。
 
   ```bash
   # 环境（示例）
